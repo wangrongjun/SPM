@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="SPM 软件项目学习系统"
+        android:textColor="@color/orange_dark"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <com.wang.android_lib.view.BorderEditText
+        android:id="@+id/et_number"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        app:borderColor="@color/orange_dark"
+        app:borderWidth="1dp"
+        app:clearBtnIcon="@mipmap/btn_clear"
+        app:hint="学号"
+        app:inputType="1"
+        app:leftIcon="@mipmap/ic_et_id_number"
+        app:text="3114006535" />
+
+    <com.wang.android_lib.view.BorderEditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        app:borderColor="@color/orange_dark"
+        app:borderWidth="1dp"
+        app:clearBtnIcon="@mipmap/btn_clear"
+        app:hint="密码"
+        app:inputType="2"
+        app:leftIcon="@mipmap/ic_et_password"
+        app:text="3114006535" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_blue_selector"
+        android:text="登录"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="40dp"
+        android:clickable="true"
+        android:text=" - 测试 - "
+        android:textColor="@color/orange_dark"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
