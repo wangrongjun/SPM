@@ -1,0 +1,13 @@
+include ':app'
+
+include ':MyLib'
+project(':MyLib').projectDir = new File('../MyLib/')
+include ':MyLib:java_lib'
+include ':MyLib:android_lib'
+
+include ':ExtraLib'
+project(':ExtraLib').projectDir = new File('../ExtraLib/')
+include ':ExtraLib:material_dialog'
+include ':ExtraLib:image_cache'
+//include ':ExtraLib:qr_scan'
+//include ':ExtraLib:sliding_menu'
