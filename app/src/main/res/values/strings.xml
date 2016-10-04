@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SPM</string>
+    <string name="app_name">SPM学习系统</string>
     <string name="action_bar_title">SPM学习系统</string>
     <string name="tab_course">课程</string>
     <string name="tab_homework">作业</string>
