@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ToolBarView">
+        <attr name="titleText" format="string" />
+        <attr name="titleColor" format="color" />
+
+        <attr name="btnOneIcon" format="reference" />
+        <attr name="btnTwoIcon" format="reference" />
+        <attr name="btnOneAlpha" format="float" />
+        <attr name="btnTwoAlpha" format="float" />
+
+        <attr name="btnRightText" format="string" />
+        <attr name="btnRightTextSize" format="dimension" />
+        <attr name="btnRightTextColor" format="color" />
+
+        <attr name="underDividerHeight" format="dimension" />
+    </declare-styleable>
+
+    <style name="ToolBarTitle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>
