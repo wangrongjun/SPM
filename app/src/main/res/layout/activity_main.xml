@@ -4,6 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/action_bar_title"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -20,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/bg_tab"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -41,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="课程"
+                android:text="@string/tab_course"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -66,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="作业"
+                android:text="@string/tab_homework"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -91,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="班级"
+                android:text="@string/tab_class"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -116,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="我"
+                android:text="@string/tab_me"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
