@@ -25,6 +25,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ExceptionActivity" />
+        <activity android:name=".activity.VideoActivity" />
 
     </application>
 

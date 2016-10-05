@@ -5,6 +5,8 @@
         <attr name="titleText" format="string" />
         <attr name="titleColor" format="color" />
 
+        <attr name="showBackBtn" format="boolean" />
+
         <attr name="btnOneIcon" format="reference" />
         <attr name="btnTwoIcon" format="reference" />
         <attr name="btnOneAlpha" format="float" />
@@ -18,7 +20,7 @@
     </declare-styleable>
 
     <style name="ToolBarTitle">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 

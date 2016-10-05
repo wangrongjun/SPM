@@ -27,23 +27,19 @@ public class ToolBarView extends RelativeLayout {
     private ImageView btnTwo;
     private TextView btnRight;
 
+    private int defaultHeight = 50;//dp
     private String titleText;
     private int titleColor;
+    private int backgroundResourse = R.color.colorPrimary;
+    private boolean showBackBtn = true;
     private Drawable btnOneIcon;
-    private float btnOneAlpha;
+    private float btnOneAlpha = 1;
     private Drawable btnTwoIcon;
-    private float btnTwoAlpha;
+    private float btnTwoAlpha = 1;
     private String btnRightText;
-    private float btnRightTextSize;
-    private int btnRightTextColor;
+    private float btnRightTextSize = 14;
+    private int btnRightTextColor = Color.BLACK;
     private float underDividerHeight;
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(
-                DimensionUtil.dipToPx(context, 50),
-                MeasureSpec.EXACTLY));
-    }
 
     public ToolBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,16 +48,18 @@ public class ToolBarView extends RelativeLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ToolBarView);
 
         titleText = ta.getString(R.styleable.ToolBarView_titleText);
-        titleColor = ta.getColor(R.styleable.ToolBarView_titleColor, Color.BLACK);
+        titleColor = ta.getColor(R.styleable.ToolBarView_titleColor, Color.WHITE);
+
+        showBackBtn = ta.getBoolean(R.styleable.ToolBarView_showBackBtn, true);
 
         btnOneIcon = ta.getDrawable(R.styleable.ToolBarView_btnOneIcon);
-        btnOneAlpha = ta.getFloat(R.styleable.ToolBarView_btnOneAlpha, 1);
+        btnOneAlpha = ta.getFloat(R.styleable.ToolBarView_btnOneAlpha, btnOneAlpha);
         btnTwoIcon = ta.getDrawable(R.styleable.ToolBarView_btnTwoIcon);
-        btnTwoAlpha = ta.getFloat(R.styleable.ToolBarView_btnTwoAlpha, 1);
+        btnTwoAlpha = ta.getFloat(R.styleable.ToolBarView_btnTwoAlpha, btnTwoAlpha);
 
         btnRightText = ta.getString(R.styleable.ToolBarView_btnRightText);
-        btnRightTextSize = ta.getDimension(R.styleable.ToolBarView_btnRightTextSize, 14);
-        btnRightTextColor = ta.getColor(R.styleable.ToolBarView_btnRightTextColor, Color.BLACK);
+        btnRightTextSize = ta.getDimension(R.styleable.ToolBarView_btnRightTextSize, btnRightTextSize);
+        btnRightTextColor = ta.getColor(R.styleable.ToolBarView_btnRightTextColor, btnRightTextColor);
 
         underDividerHeight = ta.getDimension(R.styleable.ToolBarView_underDividerHeight,
                 DimensionUtil.dipToPx(context, 0.5));
@@ -70,32 +68,54 @@ public class ToolBarView extends RelativeLayout {
         ta.recycle();
     }
 
+    /**
+     * 若指定layout_height为wrap_content，默认为50dp
+     */
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST) {//wrap_content
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(
+                    DimensionUtil.dipToPx(context, defaultHeight),
+                    MeasureSpec.EXACTLY));
+        } else {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
+
     private void initView() {
 
+
+//        设置背景
+        setBackgroundResource(R.color.colorPrimary);
+
+
 //        返回按钮
-        ImageView btnBack = new ImageView(context);
-        btnBack.setImageResource(R.mipmap.ic_btn_back_white);
-        int px = DimensionUtil.dipToPx(context, 12);
-        btnBack.setPadding(px, 0, px, 0);
-        btnBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((Activity) context).finish();
-            }
-        });
-        px = DimensionUtil.dipToPx(context, 50);
-        LayoutParams params = new LayoutParams(px, px);
-        params.addRule(ALIGN_PARENT_LEFT, TRUE);
-        addView(btnBack, params);
+        if (showBackBtn) {
+            ImageView btnBack = new ImageView(context);
+            btnBack.setImageResource(R.mipmap.ic_btn_back_white);
+            int px = DimensionUtil.dipToPx(context, 12);
+            btnBack.setPadding(px, 0, px, 0);
+            btnBack.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((Activity) context).finish();
+                }
+            });
+            px = DimensionUtil.dipToPx(context, 50);
+            LayoutParams params = new LayoutParams(px, px);
+            params.addRule(ALIGN_PARENT_LEFT, TRUE);
+            params.addRule(CENTER_VERTICAL, TRUE);
+            addView(btnBack, params);
+        }
 
 
 //        中间标题
         tvTitle = new TextView(context);
-        if (TextUtil.isEmpty(titleText)) titleText = "ECar";
+        if (TextUtil.isEmpty(titleText)) titleText = "标题";
         tvTitle.setText(titleText);
         tvTitle.setTextColor(titleColor);
         tvTitle.setTextAppearance(context, R.style.ToolBarTitle);
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.addRule(CENTER_IN_PARENT, TRUE);
         addView(tvTitle, params);
 
@@ -105,11 +125,12 @@ public class ToolBarView extends RelativeLayout {
             btnOne = new ImageView(context);
             btnOne.setImageDrawable(btnOneIcon);
             btnOne.setAlpha(btnOneAlpha);
-            px = DimensionUtil.dipToPx(context, 10);
+            int px = DimensionUtil.dipToPx(context, 12);
             btnOne.setPadding(0, px, 0, px);
             px = DimensionUtil.dipToPx(context, 50);
             params = new LayoutParams(px, px);
             params.addRule(ALIGN_PARENT_RIGHT, TRUE);
+            params.addRule(CENTER_VERTICAL, TRUE);
             addView(btnOne, params);
         }
 
@@ -119,12 +140,13 @@ public class ToolBarView extends RelativeLayout {
             btnTwo = new ImageView(context);
             btnTwo.setImageDrawable(btnTwoIcon);
             btnTwo.setAlpha(btnTwoAlpha);
-            px = DimensionUtil.dipToPx(context, 10);
+            int px = DimensionUtil.dipToPx(context, 12);
             btnTwo.setPadding(0, px, 0, px);
             px = DimensionUtil.dipToPx(context, 50);
             params = new LayoutParams(px, px);
-            params.rightMargin = px;
+            params.rightMargin = px;//与第一个icon不同的地方
             params.addRule(ALIGN_PARENT_RIGHT, TRUE);
+            params.addRule(CENTER_VERTICAL, TRUE);
             addView(btnTwo, params);
         }
 
@@ -171,7 +193,7 @@ public class ToolBarView extends RelativeLayout {
     }
 
     public TextView getRightBtnTextView() {
-        return tvTitle;
+        return btnRight;
     }
 
 }

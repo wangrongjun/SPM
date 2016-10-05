@@ -29,6 +29,8 @@ public class MyApplication extends Application {
         P.context = getApplicationContext();
         defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(myHandler);
+
+//        Vitamio.isInitialized(getApplicationContext());
     }
 
     private Thread.UncaughtExceptionHandler myHandler = new Thread.UncaughtExceptionHandler() {

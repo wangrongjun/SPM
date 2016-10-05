@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':vitamio_sample'
 
 include ':MyLib'
 project(':MyLib').projectDir = new File('../MyLib/')

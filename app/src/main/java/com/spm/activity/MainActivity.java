@@ -15,6 +15,7 @@ import com.spm.fragment.MainClassFragment;
 import com.spm.fragment.MainCourseFragment;
 import com.spm.fragment.MainHomeworkFragment;
 import com.spm.fragment.MainMeFragment;
+import com.wang.android_lib.util.WindowUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,9 +50,9 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowUtil.transStateBar(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         init();
         changePage(0);
     }
@@ -105,7 +106,7 @@ public class MainActivity extends FragmentActivity {
      * 换页
      */
     private void changePage(int position) {
-        viewPager.setCurrentItem(position, true);
+        viewPager.setCurrentItem(position, false);
         changeTab(position);
     }
 
@@ -141,11 +142,9 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    @OnClick({R.id.btn_test, R.id.btn_course, R.id.btn_homework, R.id.btn_class, R.id.btn_me})
+    @OnClick({R.id.btn_course, R.id.btn_homework, R.id.btn_class, R.id.btn_me})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_test:
-                break;
             case R.id.btn_course:
                 changePage(0);
                 break;
