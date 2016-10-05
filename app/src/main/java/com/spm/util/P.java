@@ -1,6 +1,7 @@
 package com.spm.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.spm.bean.Student;
 import com.wang.android_lib.util.PrefUtil;
@@ -21,6 +22,16 @@ public class P extends PrefUtil {
     public static boolean isFirst() {
         return isFirst(context, prefName);
 //        return true;
+    }
+
+    public static String getCookie() {
+        SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        return pref.getString("cookie", null);
+    }
+
+    public static void setCookie(String cookie) {
+        SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        pref.edit().putString("cookie", cookie).apply();
     }
 
     public static Student getStudent() {

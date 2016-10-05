@@ -12,9 +12,11 @@ import android.widget.ImageView;
 
 import com.spm.R;
 import com.spm.constant.C;
+import com.spm.util.P;
 import com.wang.android_lib.util.AnimationUtil;
 import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
+import com.wang.android_lib.util.NotificationUtil;
 import com.wang.android_lib.view.BorderEditText;
 import com.wang.java_util.StreamUtil;
 import com.wang.java_util.TextUtil;
@@ -85,9 +87,17 @@ public class LoginActivity extends Activity {
                     conn.setRequestMethod("POST");
                     conn.setConnectTimeout(3000);
                     conn.setReadTimeout(3000);
+                    String cookie = P.getCookie();
+                    NotificationUtil.showNotification(LoginActivity.this, 55, "cookie", cookie);
+                    if (!TextUtil.isEmpty(cookie)) {
+                        conn.setRequestProperty("Cookie", cookie);
+                    }
                     conn.setDoOutput(true);
-                    conn.getOutputStream().write(C.getLoginOutput(number, password, verifyCode).getBytes());
+                    conn.getOutputStream().write(
+                            C.getLoginOutput(number, password, verifyCode).getBytes());
+
                     return StreamUtil.readInputStream(conn.getInputStream());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     return e.toString();
@@ -100,8 +110,9 @@ public class LoginActivity extends Activity {
 
                 DialogUtil.cancelProgressDialog();
                 M.t(LoginActivity.this, result);
+                NotificationUtil.showNotification(LoginActivity.this, 0, "UserInfo", result);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                finish();
+                finish();
 
             }
         };
@@ -127,7 +138,12 @@ public class LoginActivity extends Activity {
                     conn.setRequestMethod("GET");
                     conn.setConnectTimeout(3000);
                     conn.setReadTimeout(3000);
+
+                    //获取
+                    P.setCookie(conn.getHeaderField("Set-Cookie"));
+
                     return BitmapFactory.decodeStream(conn.getInputStream());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
