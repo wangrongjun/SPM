@@ -25,9 +25,10 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_real_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="王荣俊"
+            android:text="姓名"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -52,9 +53,10 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_student_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3114006666"
+            android:text="学号"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -79,9 +81,10 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="男"
+            android:text="性别"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -106,9 +109,10 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20"
+            android:text="年龄"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -127,17 +131,31 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="学期"
+            android:text="电话"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="大二 下学期"
+            android:text="电话"
             android:textSize="14sp" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/btn_red_selector"
+        android:text="退出登录"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
 </LinearLayout>

@@ -1,11 +1,11 @@
 package com.spm.bean;
 
-public class Student {
+public class Teacher {
 
-    private int studentId;
+    private int teacherId;
     private String userName;
-    private String password;
-    private StudentInformation studentInformation;
+    private transient String password;
+    private TeacherInformation teacherInformation;
     private int role;
 
     public int getRole() {
@@ -16,12 +16,12 @@ public class Student {
         this.role = role;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getTeacherId() {
+        return teacherId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getUserName() {
@@ -40,26 +40,26 @@ public class Student {
         this.password = password;
     }
 
-    public StudentInformation getStudentInformation() {
-        return studentInformation;
+    public TeacherInformation getTeacherInformation() {
+        return teacherInformation;
     }
 
-    public void setStudentInformation(StudentInformation studentInformation) {
-        this.studentInformation = studentInformation;
+    public void setTeacherInformation(TeacherInformation teacherInformation) {
+        this.teacherInformation = teacherInformation;
     }
 
-    public class StudentInformation {
-        private int studentInformationId;
+    public class TeacherInformation {
+        private int teacherInformationId;
         private String realName;// 真实姓名
         private String gender;// 性别
         private int age;// 年龄
 
-        public int getStudentInformationId() {
-            return studentInformationId;
+        public int getTeacherInformationId() {
+            return teacherInformationId;
         }
 
-        public void setStudentInformationId(int studentInformationId) {
-            this.studentInformationId = studentInformationId;
+        public void setTeacherInformationId(int teacherInformationId) {
+            this.teacherInformationId = teacherInformationId;
         }
 
         public String getRealName() {
@@ -88,4 +88,3 @@ public class Student {
     }
 
 }
-

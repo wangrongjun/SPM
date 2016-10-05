@@ -39,6 +39,9 @@ public class P extends PrefUtil {
     }
 
     public static void setStudent(Student student) {
+        if (student == null) {
+            student = new Student();
+        }
         setEntity(context, prefName, student);
     }
 

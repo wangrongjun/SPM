@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.spm.R;
+import com.spm.bean.Student;
 import com.spm.constant.C;
 import com.spm.util.P;
 import com.wang.android_lib.util.AnimationUtil;
@@ -48,6 +50,14 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        String number = getIntent().getStringExtra("number");
+        String password = getIntent().getStringExtra("password");
+        if (!TextUtil.isEmpty(number, password)) {
+            etNumber.setText(number);
+            etPassword.setText(password);
+        }
+
     }
 
     @OnClick({R.id.btn_verify_code, R.id.btn_login, R.id.btn_test})
@@ -111,6 +121,8 @@ public class LoginActivity extends Activity {
                 DialogUtil.cancelProgressDialog();
                 M.t(LoginActivity.this, result);
                 NotificationUtil.showNotification(LoginActivity.this, 0, "UserInfo", result);
+                Student student = new Gson().fromJson(result, Student.class);
+                P.setStudent(student);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
 
@@ -166,6 +178,5 @@ public class LoginActivity extends Activity {
 
         task.execute();
     }
-
 
 }

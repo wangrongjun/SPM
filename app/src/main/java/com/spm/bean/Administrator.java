@@ -1,11 +1,11 @@
 package com.spm.bean;
 
-public class Student {
+public class Administrator {
 
-    private int studentId;
+    private int administratorId;
     private String userName;
-    private String password;
-    private StudentInformation studentInformation;
+    private transient String password;
+    private AdminInformation adminInformation;
     private int role;
 
     public int getRole() {
@@ -16,12 +16,12 @@ public class Student {
         this.role = role;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getAdministratorId() {
+        return administratorId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setAdministratorId(int administratorId) {
+        this.administratorId = administratorId;
     }
 
     public String getUserName() {
@@ -40,26 +40,26 @@ public class Student {
         this.password = password;
     }
 
-    public StudentInformation getStudentInformation() {
-        return studentInformation;
+    public AdminInformation getAdminInformation() {
+        return adminInformation;
     }
 
-    public void setStudentInformation(StudentInformation studentInformation) {
-        this.studentInformation = studentInformation;
+    public void setAdminInformation(AdminInformation adminInformation) {
+        this.adminInformation = adminInformation;
     }
 
-    public class StudentInformation {
-        private int studentInformationId;
+    public class AdminInformation {
+        private int adminInformationId;
         private String realName;// 真实姓名
         private String gender;// 性别
         private int age;// 年龄
 
-        public int getStudentInformationId() {
-            return studentInformationId;
+        public int getAdminInformationId() {
+            return adminInformationId;
         }
 
-        public void setStudentInformationId(int studentInformationId) {
-            this.studentInformationId = studentInformationId;
+        public void setAdminInformationId(int adminInformationId) {
+            this.adminInformationId = adminInformationId;
         }
 
         public String getRealName() {
@@ -88,4 +88,3 @@ public class Student {
     }
 
 }
-
