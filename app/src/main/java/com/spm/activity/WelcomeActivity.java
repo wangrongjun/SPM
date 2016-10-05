@@ -29,11 +29,12 @@ public class WelcomeActivity extends Activity {
                 startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
             } else {
                 if (P.getStudent().getNumber() == null) {//用户尚未登录
-                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+//                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
                 } else {
                     //TODO
-//                    startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+//                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
                 }
             }
             finish();
