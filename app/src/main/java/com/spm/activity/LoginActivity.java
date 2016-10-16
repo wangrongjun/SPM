@@ -77,6 +77,7 @@ public class LoginActivity extends Activity {
                 }
                 break;
             case R.id.btn_test:
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 break;
         }
     }

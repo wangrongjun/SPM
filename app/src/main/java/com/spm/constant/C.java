@@ -5,7 +5,7 @@ package com.spm.constant;
  */
 public class C {
 
-    public static final String hostUrl = "http://123.207.87.197/homework";
+    public static final String hostUrl = "http://123.207.87.197:8080/homework";
     public static final String verifyUrl = hostUrl + "/verifyCode";
     public static final String loginUrl = hostUrl + "/client/login";
 

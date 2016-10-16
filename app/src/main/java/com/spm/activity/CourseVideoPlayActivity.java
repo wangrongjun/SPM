@@ -19,7 +19,7 @@ import butterknife.OnClick;
 /**
  * by 王荣俊 on 2016/10/5.
  */
-public class VideoActivity extends Activity {
+public class CourseVideoPlayActivity extends Activity {
 
     @Bind(R.id.et_video_url)
     EditText etVideoUrl;
