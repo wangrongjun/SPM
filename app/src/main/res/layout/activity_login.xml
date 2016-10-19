@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bg_login"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <ImageView
@@ -17,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="SPM学习系统"
-        android:textColor="@color/orange_dark"
+        android:text="作业管理系统"
+        android:textColor="@color/white"
         android:textSize="26sp"
         android:textStyle="bold" />
 
@@ -29,7 +31,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
-        app:borderColor="@color/orange_dark"
+        app:borderColor="@color/gray"
         app:borderWidth="1dp"
         app:clearBtnIcon="@mipmap/btn_clear"
         app:hint="学号"
@@ -44,13 +46,41 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        app:borderColor="@color/orange_dark"
+        app:borderColor="@color/gray"
         app:borderWidth="1dp"
         app:clearBtnIcon="@mipmap/btn_clear"
         app:hint="密码"
         app:inputType="2"
         app:leftIcon="@mipmap/ic_et_password"
         app:text="111111" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="学生"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/rb_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="教师"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,6 +91,11 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/iv_verify_code"
+            android:layout_width="120dp"
+            android:layout_height="match_parent" />
+
         <EditText
             android:id="@+id/et_verify_code"
             android:layout_width="0dp"
@@ -68,19 +103,15 @@
             android:layout_weight="1"
             android:hint="验证码" />
 
-        <ImageView
-            android:id="@+id/iv_verify_code"
-            android:layout_width="120dp"
-            android:layout_height="match_parent" />
-
         <Button
             android:id="@+id/btn_verify_code"
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/btn_red_light_selector"
-            android:text="获取" />
+            android:background="@drawable/btn_login_selector"
+            android:text="获取"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -91,7 +122,7 @@
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
         android:layout_marginTop="40dp"
-        android:background="@drawable/btn_blue_selector"
+        android:background="@drawable/btn_login_selector"
         android:text="登录"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -106,7 +137,7 @@
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:text=" - 测试 - "
-        android:textColor="@color/orange_dark"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
 
