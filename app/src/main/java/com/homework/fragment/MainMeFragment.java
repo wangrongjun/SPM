@@ -52,6 +52,9 @@ public class MainMeFragment extends Fragment {
     private void initView() {
         Student student = P.getStudent();
         StudentInformation information = student.getStudentInformation();
+        if (information == null) {
+            return;
+        }
         tvAccount.setText(student.getAccount());
         tvName.setText(information.getRealName());
         String gender = information.getGender();

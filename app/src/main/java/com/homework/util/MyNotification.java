@@ -26,4 +26,8 @@ public class MyNotification {
     public static void showError(String error) {
         NotificationUtil.showNotification(context, 10, "Error", error);
     }
+
+    public static void showException(String exception) {
+        NotificationUtil.showNotification(context, 20, "Exception", exception);
+    }
 }
