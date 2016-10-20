@@ -9,8 +9,17 @@ public class C {
     public static final String verifyUrl = hostUrl + "/verifyCode";
     public static final String loginUrl = hostUrl + "/client/login";
 
-    public static String getLoginOutput(String number, String password, String verifyCode) {
-        return "userName=" + number + "&password=" + password + "&role=1&verifyCode=" + verifyCode;
+    public static final int CODE_ILLEGAL = -1;//权限错误
+    public static final int CODE_OK = 0;//成功
+    public static final int CODE_ERROR_NORMAL = 1;//校验错误
+    public static final int CODE_ERROR_STORAGE = 2;//存储错误
+    public static final int CODE_ERROR_UNKNOWN = 3;//未知错误
+
+    public static final int ROLE_STUDENT = 1;
+    public static final int ROLE_TEACHER = 2;
+
+    public static String getLoginOutput(String number, String password, int role, String verifyCode) {
+        return "account=" + number + "&password=" + password + "&role=" + role + "&verifyCode=" + verifyCode;
     }
 
 }

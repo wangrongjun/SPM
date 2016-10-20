@@ -28,7 +28,7 @@ public class WelcomeActivity extends Activity {
             if (P.isFirst()) {
                 startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
             } else {
-                if (P.getStudent().getUserName() == null) {//用户尚未登录
+                if (P.getStudent().getAccount() == null) {//用户尚未登录
                     startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
 //                    startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
                 } else {

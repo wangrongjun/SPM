@@ -9,25 +9,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.internal.LinkedHashTreeMap;
 import com.homework.R;
-import com.homework.bean.Student;
+import com.homework.bean.Msg;
 import com.homework.constant.C;
+import com.homework.util.MyNotification;
 import com.homework.util.P;
 import com.wang.android_lib.util.AnimationUtil;
 import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
-import com.wang.android_lib.util.NotificationUtil;
 import com.wang.android_lib.util.WindowUtil;
 import com.wang.android_lib.view.BorderEditText;
+import com.wang.java_util.JsonFormatUtil;
 import com.wang.java_util.StreamUtil;
 import com.wang.java_util.TextUtil;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,6 +51,8 @@ public class LoginActivity extends Activity {
     EditText etVerifyCode;
     @Bind(R.id.iv_verify_code)
     ImageView ivVerifyCode;
+    @Bind(R.id.rb_student)
+    RadioButton rbStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +61,9 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        String number = getIntent().getStringExtra("number");
-        String password = getIntent().getStringExtra("password");
-        if (!TextUtil.isEmpty(number, password)) {
+        String number = getIntent().getStringExtra("account");
+        if (!TextUtil.isEmpty(number)) {
             etNumber.setText(number);
-            etPassword.setText(password);
         }
 
     }
@@ -72,9 +77,10 @@ public class LoginActivity extends Activity {
             case R.id.btn_login:
                 String number = etNumber.getText();
                 String password = etPassword.getText();
+                int role = rbStudent.isChecked() ? C.ROLE_STUDENT : C.ROLE_TEACHER;
                 String verifyCode = etVerifyCode.getText().toString();
                 if (!TextUtil.isEmpty(number, password, verifyCode)) {
-                    startLogin(number, password, verifyCode);
+                    startLogin(number, password, role, verifyCode);
                 } else {
                     M.t(this, "请填写信息");
                 }
@@ -85,7 +91,7 @@ public class LoginActivity extends Activity {
         }
     }
 
-    private void startLogin(final String number, final String password, final String verifyCode) {
+    private void startLogin(final String number, final String password, final int role, final String verifyCode) {
 
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
@@ -102,13 +108,13 @@ public class LoginActivity extends Activity {
                     conn.setConnectTimeout(3000);
                     conn.setReadTimeout(3000);
                     String cookie = P.getCookie();
-                    NotificationUtil.showNotification(LoginActivity.this, 55, "cookie", cookie);
+                    MyNotification.showCookie(cookie);
                     if (!TextUtil.isEmpty(cookie)) {
                         conn.setRequestProperty("Cookie", cookie);
                     }
                     conn.setDoOutput(true);
                     conn.getOutputStream().write(
-                            C.getLoginOutput(number, password, verifyCode).getBytes());
+                            C.getLoginOutput(number, password, role, verifyCode).getBytes());
 
                     return StreamUtil.readInputStream(conn.getInputStream());
 
@@ -123,23 +129,59 @@ public class LoginActivity extends Activity {
             protected void onPostExecute(String result) {
 
                 DialogUtil.cancelProgressDialog();
-                M.t(LoginActivity.this, result);
-                NotificationUtil.showNotification(LoginActivity.this, 0, "UserInfo", result);
-                Student student = null;
+                MyNotification.showUserInfo(JsonFormatUtil.formatJson(result));
                 try {
-                    student = new Gson().fromJson(result, Student.class);
+                    Msg msg = new Gson().fromJson(result, Msg.class);
+                    switch (msg.getCode()) {
+                        case C.CODE_OK:
+                            handleLoginSucceed(msg.getMessage());
+                            break;
+                        case C.CODE_ERROR_NORMAL:
+                            M.t(LoginActivity.this, " 用户名或密码或验证码错误");
+                            break;
+                        case C.CODE_ERROR_STORAGE:
+                            M.t(LoginActivity.this, " 存储错误");
+                            break;
+                        case C.CODE_ERROR_UNKNOWN:
+                            M.t(LoginActivity.this, " 未知错误");
+                            MyNotification.showError((String) msg.getMessage());
+                            break;
+                        case C.CODE_ILLEGAL:
+                            M.t(LoginActivity.this, "权限错误");
+                            break;
+
+                    }
+
                 } catch (JsonSyntaxException e) {
+                    M.t(LoginActivity.this, "未知异常");
+                    MyNotification.showError(e.toString());
                     e.printStackTrace();
                 }
-                P.setStudent(student);
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
 
             }
         };
 
         task.execute();
 
+    }
+
+    private void handleLoginSucceed(Object message) {
+//        Student student = (Student) message;
+
+        LinkedHashTreeMap treeMap = (LinkedHashTreeMap) message;
+        Iterator iterator = treeMap.entrySet().iterator();
+        StringBuilder builder = new StringBuilder();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            builder.append(entry.getKey() + " : " + entry.getValue() + "\n\n");
+        }
+
+        MyNotification.showText(builder.toString());
+
+//        Student student = new Gson().fromJson((String) message, Student.class);
+//        P.setStudent(student);
+//        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//        finish();
     }
 
     private void startGetVerifyCode() {

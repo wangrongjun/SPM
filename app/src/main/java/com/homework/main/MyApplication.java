@@ -3,6 +3,7 @@ package com.homework.main;
 import android.app.Application;
 
 import com.homework.activity.ShowCrashActivity;
+import com.homework.util.MyNotification;
 import com.homework.util.P;
 import com.wang.android_lib.util.CrashUtil;
 
@@ -16,6 +17,8 @@ public class MyApplication extends Application {
         super.onCreate();
 
         P.context = getApplicationContext();
+        MyNotification.context = getApplicationContext();
+
         Thread.setDefaultUncaughtExceptionHandler(CrashUtil.getUncaughtExceptionHandler(
                 getApplicationContext(),
                 ShowCrashActivity.class,
