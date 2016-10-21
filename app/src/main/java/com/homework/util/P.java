@@ -12,7 +12,7 @@ import com.wang.android_lib.util.PrefUtil;
 public class P extends PrefUtil {
 
     public static Context context;
-    private static final String prefName = "spm";
+    private static final String prefName = "homework";
 
     /**
      * 用于判断是否第一次使用
@@ -21,7 +21,6 @@ public class P extends PrefUtil {
      */
     public static boolean isFirst() {
         return isFirst(context, prefName);
-//        return true;
     }
 
     public static String getCookie() {

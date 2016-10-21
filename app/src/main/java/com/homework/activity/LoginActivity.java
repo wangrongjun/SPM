@@ -13,9 +13,10 @@ import android.widget.RadioButton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.internal.LinkedHashTreeMap;
+import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.bean.Msg;
+import com.homework.bean.Student;
 import com.homework.constant.C;
 import com.homework.util.MyNotification;
 import com.homework.util.P;
@@ -31,8 +32,6 @@ import com.wang.java_util.TextUtil;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -131,29 +130,35 @@ public class LoginActivity extends Activity {
                 DialogUtil.cancelProgressDialog();
                 MyNotification.showUserInfo(JsonFormatUtil.formatJson(result));
                 try {
-                    Msg msg = new Gson().fromJson(result, Msg.class);
+                    Msg<Student> msg = new Gson().fromJson(result, new TypeToken<Msg<Student>>() {
+                    }.getType());
                     switch (msg.getCode()) {
                         case C.CODE_OK:
-                            handleLoginSucceed(msg.getMessage());
+                            P.setStudent(msg.getMessage());
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
                             break;
                         case C.CODE_ERROR_NORMAL:
-                            M.t(LoginActivity.this, " 用户名或密码或验证码错误");
+//                            M.t(LoginActivity.this, "用户名或密码或验证码错误");
+                            M.t(LoginActivity.this, msg.getMessage().toString());
                             break;
                         case C.CODE_ERROR_STORAGE:
-                            M.t(LoginActivity.this, " 存储错误");
+//                            M.t(LoginActivity.this, "存储错误");
+                            M.t(LoginActivity.this, msg.getMessage().toString());
                             break;
                         case C.CODE_ERROR_UNKNOWN:
-                            M.t(LoginActivity.this, " 未知错误");
-                            MyNotification.showError((String) msg.getMessage());
+//                            M.t(LoginActivity.this, "未知错误");
+                            M.t(LoginActivity.this, msg.getMessage().toString());
                             break;
                         case C.CODE_ILLEGAL:
-                            M.t(LoginActivity.this, "权限错误");
+//                            M.t(LoginActivity.this, "权限错误");
+                            M.t(LoginActivity.this, msg.getMessage().toString());
                             break;
 
                     }
 
                 } catch (JsonSyntaxException e) {
-                    M.t(LoginActivity.this, "未知异常");
+                    M.t(LoginActivity.this, "json解析出错");
                     MyNotification.showError(e.toString());
                     e.printStackTrace();
                 }
@@ -163,25 +168,6 @@ public class LoginActivity extends Activity {
 
         task.execute();
 
-    }
-
-    private void handleLoginSucceed(Object message) {
-//        Student student = (Student) message;
-
-        LinkedHashTreeMap treeMap = (LinkedHashTreeMap) message;
-        Iterator iterator = treeMap.entrySet().iterator();
-        StringBuilder builder = new StringBuilder();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            builder.append(entry.getKey() + " : " + entry.getValue() + "\n\n");
-        }
-
-        MyNotification.showText(builder.toString());
-
-//        Student student = new Gson().fromJson((String) message, Student.class);
-//        P.setStudent(student);
-//        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//        finish();
     }
 
     private void startGetVerifyCode() {

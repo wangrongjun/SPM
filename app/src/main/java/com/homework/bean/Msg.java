@@ -1,9 +1,9 @@
 package com.homework.bean;
 
-public class Msg {
+public class Msg<T> {
 
     private int code;//返回码
-    private Object message;//返回内容
+    private T message;//返回内容
 
     public int getCode() {
         return code;
@@ -13,11 +13,11 @@ public class Msg {
         this.code = code;
     }
 
-    public Object getMessage() {
+    public T getMessage() {
         return message;
     }
 
-    public void setMessage(Object message) {
+    public void setMessage(T message) {
         this.message = message;
     }
 }
