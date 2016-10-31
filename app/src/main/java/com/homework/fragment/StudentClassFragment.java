@@ -12,11 +12,11 @@ import com.homework.R;
 /**
  * by 王荣俊 on 2016/10/4.
  */
-public class MainHomeworkFragment extends Fragment {
+public class StudentClassFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main_homework, container, false);
+        return inflater.inflate(R.layout.fragment_student_class, container, false);
     }
 }

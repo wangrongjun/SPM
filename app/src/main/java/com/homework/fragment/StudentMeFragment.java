@@ -25,7 +25,7 @@ import butterknife.OnClick;
 /**
  * by 王荣俊 on 2016/10/4.
  */
-public class MainMeFragment extends Fragment {
+public class StudentMeFragment extends Fragment {
 
     @Bind(R.id.tv_account)
     TextView tvAccount;
@@ -43,7 +43,7 @@ public class MainMeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_me, container, false);
+        View view = inflater.inflate(R.layout.fragment_student_me, container, false);
         ButterKnife.bind(this, view);
         initView();
         return view;

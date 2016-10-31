@@ -18,6 +18,14 @@ public class C {
     public static final int ROLE_STUDENT = 1;
     public static final int ROLE_TEACHER = 2;
 
+    public static String getStudentInfoUrl(int studentClassId) {
+        return "/student/studentClass/" + studentClassId;
+    }
+
+    public static String getStudentInfoUrl(int teacherCourseId, int studentClassId) {
+        return "/student/teacherCourse/" + teacherCourseId + "/studentClass/" + studentClassId;
+    }
+
     public static String getLoginOutput(String number, String password, int role, String verifyCode) {
         return "account=" + number + "&password=" + password + "&role=" + role + "&verifyCode=" + verifyCode;
     }

@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.homework.R;
-import com.homework.fragment.MainClassFragment;
-import com.homework.fragment.MainCourseFragment;
-import com.homework.fragment.MainHomeworkFragment;
-import com.homework.fragment.MainMeFragment;
+import com.homework.fragment.StudentClassFragment;
+import com.homework.fragment.StudentCourseFragment;
+import com.homework.fragment.StudentHomeworkFragment;
+import com.homework.fragment.StudentMeFragment;
 import com.wang.android_lib.util.WindowUtil;
 
 import butterknife.Bind;
@@ -42,10 +42,10 @@ public class MainActivity extends FragmentActivity {
     @Bind(R.id.view_pager)
     ViewPager viewPager;
 
-    private MainHomeworkFragment homeworkFragment;
-    private MainCourseFragment courseFragment;
-    private MainClassFragment classFragment;
-    private MainMeFragment meFragment;
+    private StudentHomeworkFragment homeworkFragment;
+    private StudentCourseFragment courseFragment;
+    private StudentClassFragment classFragment;
+    private StudentMeFragment meFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +59,10 @@ public class MainActivity extends FragmentActivity {
 
     private void init() {
 
-        homeworkFragment = new MainHomeworkFragment();
-        courseFragment = new MainCourseFragment();
-        classFragment = new MainClassFragment();
-        meFragment = new MainMeFragment();
+        homeworkFragment = new StudentHomeworkFragment();
+        courseFragment = new StudentCourseFragment();
+        classFragment = new StudentClassFragment();
+        meFragment = new StudentMeFragment();
 
         final Fragment[] fragments = new Fragment[]{
                 homeworkFragment,
