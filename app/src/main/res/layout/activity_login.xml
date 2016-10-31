@@ -37,7 +37,7 @@
         app:hint="学号"
         app:inputType="1"
         app:leftIcon="@mipmap/ic_et_id_number"
-        app:text="111111" />
+        app:text="3114006500" />
 
     <com.wang.android_lib.view.BorderEditText
         android:id="@+id/et_password"
@@ -50,7 +50,7 @@
         app:borderWidth="1dp"
         app:clearBtnIcon="@mipmap/btn_clear"
         app:hint="密码"
-        app:inputType="2"
+        app:inputType="1"
         app:leftIcon="@mipmap/ic_et_password"
         app:text="111111" />
 

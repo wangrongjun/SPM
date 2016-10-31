@@ -1,7 +1,7 @@
 package com.homework.bean;
 
 /**
- * by 王荣俊 on 2016/10/20.
+ * by wangrongjun on 2016/10/31.
  */
 public class StudentInformation {
 
@@ -10,7 +10,7 @@ public class StudentInformation {
     private String gender;// 性别
     private int age;// 年龄
     private String email;// 邮箱
-//    private StudentClass studentClass;// 所在班级
+    private StudentClass studentClass;// 所在班级
 
     public int getStudentInformationId() {
         return studentInformationId;
@@ -50,5 +50,13 @@ public class StudentInformation {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public StudentClass getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(StudentClass studentClass) {
+        this.studentClass = studentClass;
     }
 }

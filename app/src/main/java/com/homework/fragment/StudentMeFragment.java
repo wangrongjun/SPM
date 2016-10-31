@@ -55,13 +55,19 @@ public class StudentMeFragment extends Fragment {
         if (information == null) {
             return;
         }
+
         tvAccount.setText(student.getAccount());
         tvName.setText(information.getRealName());
         String gender = information.getGender();
+        String className = "未知";
+        if (information.getStudentClass() != null) {
+            className = information.getStudentClass().getClassName();
+        }
+
         tvGender.setText(TextUtil.isEmpty(gender) ? "保密" : gender);
         int age = information.getAge();
         tvAge.setText(age < 0 ? "保密" : age + "");
-        tvClass.setText("未填写");
+        tvClass.setText(className);
         String email = information.getEmail();
         tvContact.setText(TextUtil.isEmpty(email) ? "未填写" : email);
     }

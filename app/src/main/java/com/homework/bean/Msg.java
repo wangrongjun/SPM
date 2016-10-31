@@ -1,9 +1,8 @@
 package com.homework.bean;
 
 public class Msg<T> {
-
-    private int code;//返回码
-    private T message;//返回内容
+    private int code;
+    private T message;
 
     public int getCode() {
         return code;

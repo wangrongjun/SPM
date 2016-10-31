@@ -21,7 +21,7 @@ public class MyApplication extends Application {
         P.context = getApplicationContext();
         MyNotification.context = getApplicationContext();
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+        Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
 
@@ -33,7 +33,9 @@ public class MyApplication extends Application {
 
                 Process.killProcess(Process.myPid());
             }
-        });
+        };
+
+//        Thread.setDefaultUncaughtExceptionHandler(handler);
 
     }
 

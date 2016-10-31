@@ -6,13 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.bean.Msg;
@@ -20,6 +19,7 @@ import com.homework.bean.Student;
 import com.homework.constant.C;
 import com.homework.util.MyNotification;
 import com.homework.util.P;
+import com.homework.util.Util;
 import com.wang.android_lib.util.AnimationUtil;
 import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
@@ -30,6 +30,7 @@ import com.wang.java_util.StreamUtil;
 import com.wang.java_util.TextUtil;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -102,7 +103,8 @@ public class LoginActivity extends Activity {
             protected String doInBackground(Void... params) {
 
                 try {
-                    HttpURLConnection conn = (HttpURLConnection) new URL(C.loginUrl).openConnection();
+                    HttpURLConnection conn =
+                            (HttpURLConnection) new URL(C.getLoginUrl()).openConnection();
                     conn.setRequestMethod("POST");
                     conn.setConnectTimeout(3000);
                     conn.setReadTimeout(3000);
@@ -129,38 +131,16 @@ public class LoginActivity extends Activity {
 
                 DialogUtil.cancelProgressDialog();
                 MyNotification.showUserInfo(JsonFormatUtil.formatJson(result));
-                try {
-                    Msg<Student> msg = new Gson().fromJson(result, new TypeToken<Msg<Student>>() {
-                    }.getType());
-                    switch (msg.getCode()) {
-                        case C.CODE_OK:
-                            P.setStudent(msg.getMessage());
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
-                            break;
-                        case C.CODE_ERROR_NORMAL:
-//                            M.t(LoginActivity.this, "用户名或密码或验证码错误");
-                            M.t(LoginActivity.this, msg.getMessage().toString());
-                            break;
-                        case C.CODE_ERROR_STORAGE:
-//                            M.t(LoginActivity.this, "存储错误");
-                            M.t(LoginActivity.this, msg.getMessage().toString());
-                            break;
-                        case C.CODE_ERROR_UNKNOWN:
-//                            M.t(LoginActivity.this, "未知错误");
-                            M.t(LoginActivity.this, msg.getMessage().toString());
-                            break;
-                        case C.CODE_ILLEGAL:
-//                            M.t(LoginActivity.this, "权限错误");
-                            M.t(LoginActivity.this, msg.getMessage().toString());
-                            break;
-
-                    }
-
-                } catch (JsonSyntaxException e) {
-                    M.t(LoginActivity.this, "json解析出错");
-                    MyNotification.showError(e.toString());
-                    e.printStackTrace();
+                Type type = new TypeToken<Msg<Student>>() {
+                }.getType();
+                Pair<Boolean, Object> pair = Util.handleMsg(LoginActivity.this, result, type);
+                if (pair.first) {
+                    Student student = (Student) pair.second;
+                    P.setStudent(student);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    M.t(LoginActivity.this, pair.second + "");
                 }
 
             }
@@ -183,7 +163,8 @@ public class LoginActivity extends Activity {
             protected Bitmap doInBackground(Void... params) {
 
                 try {
-                    HttpURLConnection conn = (HttpURLConnection) new URL(C.verifyUrl).openConnection();
+                    HttpURLConnection conn =
+                            (HttpURLConnection) new URL(C.getVerifyUrl()).openConnection();
                     conn.setRequestMethod("GET");
                     conn.setConnectTimeout(3000);
                     conn.setReadTimeout(3000);

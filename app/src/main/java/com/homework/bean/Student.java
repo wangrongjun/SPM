@@ -1,6 +1,8 @@
 package com.homework.bean;
 
-
+/**
+ * by wangrongjun on 2016/10/31.
+ */
 public class Student {
 
     private int studentId;
