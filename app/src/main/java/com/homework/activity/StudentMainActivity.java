@@ -21,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends FragmentActivity {
+public class StudentMainActivity extends FragmentActivity {
 
     @Bind(R.id.iv_course)
     ImageView ivCourse;
@@ -99,7 +99,8 @@ public class MainActivity extends FragmentActivity {
             }
         });
         //设置左右缓存页面数为3，避免重复加载
-        viewPager.setOffscreenPageLimit(3);
+//        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(1);//测试用
     }
 
     /**

@@ -1,13 +1,13 @@
 package com.homework.util;
 
 import android.content.Context;
-import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.homework.bean.Msg;
 import com.homework.constant.C;
 import com.wang.android_lib.util.M;
+import com.wang.java_util.Pair;
 
 import java.lang.reflect.Type;
 
@@ -15,7 +15,24 @@ import java.lang.reflect.Type;
  * by wangrongjun on 2016/10/31.
  */
 public class Util {
-
+    /**
+     * 使用样例：
+     * <p/>
+     * Type type = new TypeToken<Msg<List<Student>>>() {
+     * }.getType();
+     * Pair<Boolean, Object> pair = Util.handleMsg(getActivity(), r.result, type);
+     * if (pair.first) {
+     * List<Student> studentList = (List<Student>) pair.second;
+     * lvStudent.setAdapter(new StudentListAdapter(getActivity(), studentList));
+     * } else {
+     * M.t(getActivity(), pair.second + "");
+     * }
+     *
+     * @param context
+     * @param result
+     * @param type
+     * @return
+     */
     public static Pair<Boolean, Object> handleMsg(Context context, String result, Type type) {
         Msg msg;
         try {

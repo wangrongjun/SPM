@@ -23,7 +23,9 @@
 
         <activity android:name="com.homework.activity.GuideActivity" />
         <activity android:name="com.homework.activity.LoginActivity" />
-        <activity android:name="com.homework.activity.MainActivity" />
+        <activity android:name=".activity.StudentMainActivity" />
+        <activity android:name=".activity.StudentInfoActivity" />
+
         <activity
             android:name="com.homework.activity.ShowCrashActivity"
             android:process=":show_crash" />

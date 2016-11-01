@@ -3,7 +3,6 @@ package com.homework.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.homework.R;
+import com.homework.activity.StudentInfoActivity;
 import com.homework.adapter.StudentListAdapter;
 import com.homework.bean.Msg;
 import com.homework.bean.Student;
@@ -24,8 +24,8 @@ import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
 import com.wang.android_lib.util.M;
-import com.wang.java_util.GsonUtil;
 import com.wang.java_util.HttpUtil;
+import com.wang.java_util.Pair;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -49,11 +49,11 @@ public class StudentClassFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_student_class, container, false);
         ButterKnife.bind(this, view);
         initView();
+        startGetClassInfo();
         return view;
     }
 
     private void initView() {
-
         try {
             String className = P.getStudent().getStudentInformation().getStudentClass().getClassName();
             tvClassName.setText(className);
@@ -64,20 +64,21 @@ public class StudentClassFragment extends Fragment {
         lvStudent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (id == -1 && position == 0) {//如果是空适配器，即加载失败
+                if (id == NullAdapter.NULL_ADAPTER_ID && position == 0) {//如果是空适配器，即加载失败
                     startGetClassInfo();
+                } else {
+                    Student student = (Student) lvStudent.getAdapter().getItem(position);
+                    StudentInfoActivity.start(getActivity(), student);
                 }
             }
         });
-
-        startGetClassInfo();
     }
 
     private void startGetClassInfo() {
         lvStudent.setAdapter(new LoadingAdapter(getActivity()));
 
         AndroidHttpHelper helper = new AndroidHttpHelper(getActivity());
-        helper.setShowToastHint(true).setCookie(P.getCookie());
+        helper.setShowToastHint(true).addRequestProperty("Cookie", P.getCookie());
         helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
             @Override
             public void onSucceed(HttpUtil.Result r) {
@@ -86,10 +87,9 @@ public class StudentClassFragment extends Fragment {
                 Pair<Boolean, Object> pair = Util.handleMsg(getActivity(), r.result, type);
                 if (pair.first) {
                     List<Student> studentList = (List<Student>) pair.second;
-                    GsonUtil.printFormatJson(studentList);
+                    lvStudent.setAdapter(new StudentListAdapter(getActivity(), studentList));
                 } else {
                     M.t(getActivity(), pair.second + "");
-                    lvStudent.setAdapter(new StudentListAdapter(getActivity()));
                 }
             }
         });

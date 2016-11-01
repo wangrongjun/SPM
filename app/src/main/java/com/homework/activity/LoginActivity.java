@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,12 +19,16 @@ import com.homework.constant.C;
 import com.homework.util.MyNotification;
 import com.homework.util.P;
 import com.homework.util.Util;
+import com.wang.android_lib.helper.AndroidHttpHelper;
+import com.wang.android_lib.util.AndroidHttpUtil;
 import com.wang.android_lib.util.AnimationUtil;
 import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
 import com.wang.android_lib.util.WindowUtil;
 import com.wang.android_lib.view.BorderEditText;
+import com.wang.java_util.HttpUtil;
 import com.wang.java_util.JsonFormatUtil;
+import com.wang.java_util.Pair;
 import com.wang.java_util.StreamUtil;
 import com.wang.java_util.TextUtil;
 
@@ -86,12 +89,41 @@ public class LoginActivity extends Activity {
                 }
                 break;
             case R.id.btn_test:
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
                 break;
         }
     }
 
     private void startLogin(final String number, final String password, final int role, final String verifyCode) {
+        DialogUtil.showProgressDialog(LoginActivity.this, "正在登录");
+
+        AndroidHttpHelper helper = new AndroidHttpHelper(this);
+        helper.setRequestMethod("POST").addRequestProperty("Cookie", P.getCookie());
+        helper.setOutput(C.getLoginOutput(number, password, role, verifyCode));
+        helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
+
+            @Override
+            public void onSucceed(HttpUtil.Result r) {
+                DialogUtil.cancelProgressDialog();
+
+                Type type = new TypeToken<Msg<Student>>() {
+                }.getType();
+                Pair<Boolean, Object> pair = Util.handleMsg(LoginActivity.this, r.result, type);
+                if (pair.first) {
+                    Student student = (Student) pair.second;
+//                    P.setCookie(r.setCookie);
+                    P.setStudent(student);
+                    startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
+                    finish();
+                } else {
+                    M.t(LoginActivity.this, pair.second + "");
+                }
+            }
+
+        }).request(C.getLoginUrl());
+    }
+
+    private void startLogin1(final String number, final String password, final int role, final String verifyCode) {
 
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
@@ -137,7 +169,7 @@ public class LoginActivity extends Activity {
                 if (pair.first) {
                     Student student = (Student) pair.second;
                     P.setStudent(student);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
                     finish();
                 } else {
                     M.t(LoginActivity.this, pair.second + "");
@@ -169,7 +201,7 @@ public class LoginActivity extends Activity {
                     conn.setConnectTimeout(3000);
                     conn.setReadTimeout(3000);
 
-                    //获取
+                    //获取Cookie
                     P.setCookie(conn.getHeaderField("Set-Cookie"));
 
                     return BitmapFactory.decodeStream(conn.getInputStream());
