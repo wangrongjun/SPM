@@ -66,7 +66,7 @@ public class StudentClassFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id == NullAdapter.NULL_ADAPTER_ID && position == 0) {//如果是空适配器，即加载失败
                     startGetClassInfo();
-                } else {
+                } else if (id != LoadingAdapter.LOADING_ADAPTER_ID) {//若当前不是查询中，即已加载完成
                     Student student = (Student) lvStudent.getAdapter().getItem(position);
                     StudentInfoActivity.start(getActivity(), student);
                 }
@@ -90,6 +90,7 @@ public class StudentClassFragment extends Fragment {
                     lvStudent.setAdapter(new StudentListAdapter(getActivity(), studentList));
                 } else {
                     M.t(getActivity(), pair.second + "");
+                    lvStudent.setAdapter(new NullAdapter(getActivity(), "重新获取"));
                 }
             }
         });
@@ -99,7 +100,7 @@ public class StudentClassFragment extends Fragment {
                 lvStudent.setAdapter(new NullAdapter(getActivity(), "重新获取"));
             }
         });
-        helper.request(C.getStudentInfoUrl(P.getStudent().getStudentId()));
+        helper.request(C.getClassmateInfoUrl(P.getStudent().getStudentId()));
     }
 
     @Override

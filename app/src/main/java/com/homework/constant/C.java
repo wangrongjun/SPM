@@ -28,13 +28,11 @@ public class C {
         return "account=" + number + "&password=" + password + "&role=" + role + "&verifyCode=" + verifyCode;
     }
 
-    public static String getStudentInfoUrl(int studentClassId) {
+    public static String getClassmateInfoUrl(int studentClassId) {
         return hostUrl + "/student/studentClass/" + studentClassId;
     }
 
-    public static String getStudentInfoUrl(int teacherCourseId, int studentClassId) {
-        return hostUrl + "/student/teacherCourse/" + teacherCourseId + "/studentClass/" + studentClassId;
+    public static String getCourseInfoUrl(int studentId) {
+        return hostUrl + "/teacherCourse/student/" + studentId;
     }
-
-
 }

@@ -25,6 +25,8 @@
         <activity android:name="com.homework.activity.LoginActivity" />
         <activity android:name=".activity.StudentMainActivity" />
         <activity android:name=".activity.StudentInfoActivity" />
+        <activity android:name=".activity.CourseInfoActivity" />
+        <activity android:name=".activity.CourseDataFileListActivity" />
 
         <activity
             android:name="com.homework.activity.ShowCrashActivity"

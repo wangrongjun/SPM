@@ -38,6 +38,7 @@ public class Util {
         try {
             msg = new Gson().fromJson(result, type);
         } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             msg = new Gson().fromJson(result, Msg.class);
             return new Pair<>(false, msg.getMessage());
         }
