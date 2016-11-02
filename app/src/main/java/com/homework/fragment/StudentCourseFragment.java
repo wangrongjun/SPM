@@ -80,14 +80,16 @@ public class StudentCourseFragment extends Fragment {
                     lvCourse.setAdapter(new CourseListAdapter(getActivity(), teacherCourseList));
                 } else {
                     M.t(getActivity(), pair.second + "");
-                    lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+//                    lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+                    lvCourse.setAdapter(new CourseListAdapter(getActivity()));
                 }
             }
         });
         helper.setOnFailedListener(new AndroidHttpUtil.OnFailedListener() {
             @Override
             public void onFailed(HttpUtil.Result r) {
-                lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+//                lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+                lvCourse.setAdapter(new CourseListAdapter(getActivity()));
             }
         });
         helper.request(C.getCourseInfoUrl(P.getStudent().getStudentId()));
