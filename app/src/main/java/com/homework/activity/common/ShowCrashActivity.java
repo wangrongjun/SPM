@@ -1,4 +1,4 @@
-package com.homework.activity;
+package com.homework.activity.common;
 
 import android.app.Activity;
 import android.os.Bundle;

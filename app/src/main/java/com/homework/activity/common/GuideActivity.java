@@ -1,4 +1,4 @@
-package com.homework.activity;
+package com.homework.activity.common;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

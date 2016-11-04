@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.homework.R;
-import com.homework.activity.LoginActivity;
+import com.homework.activity.common.LoginActivity;
 import com.homework.bean.Student;
 import com.homework.bean.StudentInformation;
 import com.homework.util.P;

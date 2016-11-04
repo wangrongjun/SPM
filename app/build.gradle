@@ -30,13 +30,18 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.jakewharton:butterknife:7.0.1'
+
     compile project(':MyLib:java_lib')
     compile project(':MyLib:android_lib')
-    compile project(':ExtraLib:material_dialog')
-    compile project(':ExtraLib:image_cache')
-    compile(name: 'android_common_master', ext: 'aar')
+
+//    https://github.com/Jude95/SwipeBackHelper
+    compile 'com.jude:swipebackhelper:3.1.2'
+
+//    compile project(':ExtraLib:material_dialog')
+//    compile project(':ExtraLib:image_cache')
+//    compile(name: 'android_common_master', ext: 'aar')
     //    compile project(':ExtraLib:qr_scan')
     //    compile project(':ExtraLib:sliding_menu')
     //    compile(name: 'slidingmenu', ext: 'aar')
-    compile 'com.charonchui.vitamio:vitamio:4.2.2'
+//    compile 'com.charonchui.vitamio:vitamio:4.2.2'
 }

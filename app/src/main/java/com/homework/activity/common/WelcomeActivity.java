@@ -1,4 +1,4 @@
-package com.homework.activity;
+package com.homework.activity.common;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.homework.R;
+import com.homework.activity.StudentMainActivity;
 import com.homework.util.P;
 
 /**

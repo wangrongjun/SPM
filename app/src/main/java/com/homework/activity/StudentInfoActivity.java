@@ -1,6 +1,5 @@
 package com.homework.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.homework.R;
+import com.homework.activity.common.BaseActivity;
 import com.homework.bean.Student;
 import com.homework.bean.StudentClass;
 import com.homework.bean.StudentInformation;
@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 /**
  * by wangrongjun on 2016/11/1.
  */
-public class StudentInfoActivity extends Activity {
+public class StudentInfoActivity extends BaseActivity {
 
     @Bind(R.id.tv_account)
     TextView tvAccount;

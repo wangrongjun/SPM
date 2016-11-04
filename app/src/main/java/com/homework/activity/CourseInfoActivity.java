@@ -1,15 +1,16 @@
 package com.homework.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.homework.R;
+import com.homework.activity.common.BaseActivity;
 import com.homework.adapter.SchoolWorkListAdapter;
 import com.homework.bean.SchoolWork;
 import com.homework.bean.TeacherCourse;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 /**
  * by wangrongjun on 2016/11/1.
  */
-public class CourseInfoActivity extends Activity {
+public class CourseInfoActivity extends BaseActivity {
 
     @Bind(R.id.tool_bar)
     ToolBarView toolBar;
@@ -60,6 +61,13 @@ public class CourseInfoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(CourseInfoActivity.this, CourseDataFileListActivity.class));
+            }
+        });
+
+        lvHomework.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(CourseInfoActivity.this, SchoolWorkInfoActivity.class));
             }
         });
 

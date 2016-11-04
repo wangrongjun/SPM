@@ -1,4 +1,4 @@
-package com.homework.activity;
+package com.homework.activity.common;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.homework.R;
+import com.homework.activity.StudentMainActivity;
 import com.homework.bean.Msg;
 import com.homework.bean.Student;
 import com.homework.constant.C;

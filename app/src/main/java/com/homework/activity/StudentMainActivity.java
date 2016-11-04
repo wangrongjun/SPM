@@ -3,7 +3,6 @@ package com.homework.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -11,17 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.homework.R;
+import com.homework.activity.common.BaseActivity;
 import com.homework.fragment.StudentClassFragment;
 import com.homework.fragment.StudentCourseFragment;
 import com.homework.fragment.StudentHomeworkFragment;
 import com.homework.fragment.StudentMeFragment;
+import com.jude.swipbackhelper.SwipeBackHelper;
 import com.wang.android_lib.util.WindowUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StudentMainActivity extends FragmentActivity {
+public class StudentMainActivity extends BaseActivity {
 
     @Bind(R.id.iv_course)
     ImageView ivCourse;
@@ -53,11 +54,16 @@ public class StudentMainActivity extends FragmentActivity {
         WindowUtil.transStateBar(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        init();
+        initViewPager();
+        initSwipeBack();
         changePage(0);
     }
 
-    private void init() {
+    private void initSwipeBack() {
+        SwipeBackHelper.getCurrentPage(this).setSwipeBackEnable(false);
+    }
+
+    private void initViewPager() {
 
         homeworkFragment = new StudentHomeworkFragment();
         courseFragment = new StudentCourseFragment();

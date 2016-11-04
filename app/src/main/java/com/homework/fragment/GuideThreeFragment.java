@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.homework.R;
-import com.homework.activity.LoginActivity;
+import com.homework.activity.common.LoginActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
