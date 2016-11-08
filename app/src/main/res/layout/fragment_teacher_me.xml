@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/student_info"/>
+    <include layout="@layout/teacher_info" />
 
     <ImageView
         android:layout_width="match_parent"

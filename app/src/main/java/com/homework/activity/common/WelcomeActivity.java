@@ -8,6 +8,7 @@ import android.os.Message;
 
 import com.homework.R;
 import com.homework.activity.StudentMainActivity;
+import com.homework.activity.TeacherMainActivity;
 import com.homework.util.P;
 
 /**
@@ -29,11 +30,19 @@ public class WelcomeActivity extends Activity {
             if (P.isFirst()) {
                 startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
             } else {
-                if (P.getStudent().getAccount() == null) {//用户尚未登录
-                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+
+                String studentAccount = P.getStudent().getAccount();
+                String teacherAccount = P.getTeacher().getAccount();
+                if (studentAccount == null) {
+                    if (teacherAccount == null) {
+                        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    } else {
+                        startActivity(new Intent(WelcomeActivity.this, TeacherMainActivity.class));
+                    }
                 } else {
                     startActivity(new Intent(WelcomeActivity.this, StudentMainActivity.class));
                 }
+
             }
             finish();
             return true;

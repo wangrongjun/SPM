@@ -7,6 +7,8 @@ public class C {
 
     public static final String hostUrl = "http://123.207.87.197:8080/homework";
 
+    public static String dir;
+
     public static final int CODE_ILLEGAL = -1;//权限错误
     public static final int CODE_OK = 0;//成功
     public static final int CODE_ERROR_NORMAL = 1;//校验错误
@@ -32,7 +34,39 @@ public class C {
         return hostUrl + "/student/studentClass/" + studentClassId;
     }
 
-    public static String getCourseInfoUrl(int studentId) {
+    public static String getStudentCourseInfoUrl(int studentId) {
         return hostUrl + "/teacherCourse/student/" + studentId;
     }
+
+    /**
+     * 获取指定编号老师上的课程的学生班级
+     * 请求方式:GET
+     *
+     * @return Map<Integer, List<Integer>>转成的json(键为课程编号,值List表示该课程下的班级编号集合)
+     * {"code":0,"message":{"1":[1]}}
+     */
+    public static String getTeacherCourseInfoUrl(int teacherId) {
+        return hostUrl + "/teacherCourse/studentClasses/" + teacherId;
+    }
+
+    /**
+     * 获取课程作业  请求方式:GET  权限：教师，学生
+     *
+     * @param date 表示获取该日期后的作业(时间格式:yyyy-MM-dd HH:mm)
+     * @return SchoolWork转成的json(作业名, 内容, 截止日期, 附件, 修改日期, 创建日期, 提交的数量)
+     */
+    public static String getSchoolWorkUrl(int teacherCourseId, String date) {
+        return hostUrl + "/schoolWork/" + teacherCourseId + "/" + date;
+    }
+
+    /**
+     * 教师发布课程作业
+     * @return
+     */
+    public static String addSchoolWorkUrl() {
+        return hostUrl + "/schoolWork";
+    }
+    
+    
+
 }

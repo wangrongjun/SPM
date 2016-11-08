@@ -11,17 +11,20 @@ import android.widget.TextView;
 
 import com.homework.R;
 import com.homework.activity.common.BaseActivity;
-import com.homework.fragment.StudentClassFragment;
-import com.homework.fragment.StudentCourseFragment;
-import com.homework.fragment.StudentHomeworkFragment;
-import com.homework.fragment.StudentMeFragment;
+import com.homework.fragment.TeacherClassFragment;
+import com.homework.fragment.TeacherCourseFragment;
+import com.homework.fragment.TeacherHomeworkFragment;
+import com.homework.fragment.TeacherMeFragment;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StudentMainActivity extends BaseActivity {
+/**
+ * by wangrongjun on 2016/11/7.
+ */
+public class TeacherMainActivity extends BaseActivity {
 
     @Bind(R.id.iv_course)
     ImageView ivCourse;
@@ -42,10 +45,10 @@ public class StudentMainActivity extends BaseActivity {
     @Bind(R.id.view_pager)
     ViewPager viewPager;
 
-    private StudentHomeworkFragment homeworkFragment;
-    private StudentCourseFragment courseFragment;
-    private StudentClassFragment classFragment;
-    private StudentMeFragment meFragment;
+    private TeacherHomeworkFragment homeworkFragment;
+    private TeacherCourseFragment courseFragment;
+    private TeacherClassFragment classFragment;
+    private TeacherMeFragment meFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +66,10 @@ public class StudentMainActivity extends BaseActivity {
 
     private void initViewPager() {
 
-        homeworkFragment = new StudentHomeworkFragment();
-        courseFragment = new StudentCourseFragment();
-        classFragment = new StudentClassFragment();
-        meFragment = new StudentMeFragment();
+        homeworkFragment = new TeacherHomeworkFragment();
+        courseFragment = new TeacherCourseFragment();
+        classFragment = new TeacherClassFragment();
+        meFragment = new TeacherMeFragment();
 
         final Fragment[] fragments = new Fragment[]{
                 homeworkFragment,

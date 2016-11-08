@@ -1,4 +1,4 @@
-package com.homework.fragment;
+package com.homework.fragment.common;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import com.homework.R;
 
 /**
- *  by 王荣俊 on 2016/9/28.
+ * by 王荣俊 on 2016/9/28.
  */
-public class GuideOneFragment extends Fragment {
+public class GuideTwoFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_guide_one,container,false);
+        return inflater.inflate(R.layout.fragment_guide_two, container, false);
     }
 }

@@ -1,6 +1,7 @@
 package com.homework.activity.common;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,14 +11,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.StudentMainActivity;
+import com.homework.activity.TeacherMainActivity;
 import com.homework.bean.Msg;
 import com.homework.bean.Student;
+import com.homework.bean.Teacher;
 import com.homework.constant.C;
-import com.homework.util.MyNotification;
 import com.homework.util.P;
 import com.homework.util.Util;
 import com.wang.android_lib.helper.AndroidHttpHelper;
@@ -27,10 +30,9 @@ import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
 import com.wang.android_lib.util.WindowUtil;
 import com.wang.android_lib.view.BorderEditText;
+import com.wang.java_util.FileUtil;
 import com.wang.java_util.HttpUtil;
-import com.wang.java_util.JsonFormatUtil;
 import com.wang.java_util.Pair;
-import com.wang.java_util.StreamUtil;
 import com.wang.java_util.TextUtil;
 
 import java.io.IOException;
@@ -66,10 +68,23 @@ public class LoginActivity extends Activity {
         ButterKnife.bind(this);
 
         String number = getIntent().getStringExtra("account");
+        int role = getIntent().getIntExtra("role", C.ROLE_STUDENT);
         if (!TextUtil.isEmpty(number)) {
+            if (role == C.ROLE_STUDENT) {
+                rbStudent.setChecked(true);
+            } else if (role == C.ROLE_TEACHER) {
+                rbStudent.setChecked(false);
+            }
             etNumber.setText(number);
         }
 
+    }
+
+    public static void start(Context context, String account, int role) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra("account", account);
+        intent.putExtra("role", role);
+        context.startActivity(intent);
     }
 
     @OnClick({R.id.btn_verify_code, R.id.btn_login, R.id.btn_test})
@@ -107,80 +122,39 @@ public class LoginActivity extends Activity {
             public void onSucceed(HttpUtil.Result r) {
                 DialogUtil.cancelProgressDialog();
 
-                Type type = new TypeToken<Msg<Student>>() {
-                }.getType();
-                Pair<Boolean, Object> pair = Util.handleMsg(LoginActivity.this, r.result, type);
-                if (pair.first) {
-                    Student student = (Student) pair.second;
-//                    P.setCookie(r.setCookie);
-                    P.setStudent(student);
-                    startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
-                    finish();
+                if (role == C.ROLE_STUDENT) {
+                    Type type = new TypeToken<Msg<Student>>() {
+                    }.getType();
+                    Pair<Boolean, Object> pair = Util.handleMsg(LoginActivity.this, r.result, type);
+                    if (pair.first) {
+                        Student student = (Student) pair.second;
+                        P.setStudent(student);
+                        startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
+                        finish();
+                    } else {
+                        M.t(LoginActivity.this, pair.second + "");
+                    }
+
+                } else if (role == C.ROLE_TEACHER) {
+                    Type type = new TypeToken<Msg<Teacher>>() {
+                    }.getType();
+                    Pair<Boolean, Object> pair = Util.handleMsg(LoginActivity.this, r.result, type);
+                    if (pair.first) {
+                        Teacher teacher = (Teacher) pair.second;
+                        P.setTeacher(teacher);
+                        startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+                        finish();
+                    } else {
+                        M.t(LoginActivity.this, pair.second + "");
+                    }
+
                 } else {
-                    M.t(LoginActivity.this, pair.second + "");
+                    Toast.makeText(LoginActivity.this, "role=" + role, Toast.LENGTH_SHORT).show();
                 }
+
             }
 
         }).request(C.getLoginUrl());
-    }
-
-    private void startLogin1(final String number, final String password, final int role, final String verifyCode) {
-
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected void onPreExecute() {
-                DialogUtil.showProgressDialog(LoginActivity.this, "正在登录");
-            }
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                try {
-                    HttpURLConnection conn =
-                            (HttpURLConnection) new URL(C.getLoginUrl()).openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setConnectTimeout(3000);
-                    conn.setReadTimeout(3000);
-                    String cookie = P.getCookie();
-                    MyNotification.showCookie(cookie);
-                    if (!TextUtil.isEmpty(cookie)) {
-                        conn.setRequestProperty("Cookie", cookie);
-                    }
-                    conn.setDoOutput(true);
-                    conn.getOutputStream().write(
-                            C.getLoginOutput(number, password, role, verifyCode).getBytes());
-
-                    return StreamUtil.readInputStream(conn.getInputStream());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return e.toString();
-                }
-
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-
-                DialogUtil.cancelProgressDialog();
-                MyNotification.showUserInfo(JsonFormatUtil.formatJson(result));
-                Type type = new TypeToken<Msg<Student>>() {
-                }.getType();
-                Pair<Boolean, Object> pair = Util.handleMsg(LoginActivity.this, result, type);
-                if (pair.first) {
-                    Student student = (Student) pair.second;
-                    P.setStudent(student);
-                    startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
-                    finish();
-                } else {
-                    M.t(LoginActivity.this, pair.second + "");
-                }
-
-            }
-        };
-
-        task.execute();
-
     }
 
     private void startGetVerifyCode() {
@@ -203,7 +177,10 @@ public class LoginActivity extends Activity {
                     conn.setReadTimeout(3000);
 
                     //获取Cookie
-                    P.setCookie(conn.getHeaderField("Set-Cookie"));
+                    String cookie = conn.getHeaderField("Set-Cookie");
+                    P.setCookie(cookie);
+                    //TODO 待删
+                    FileUtil.write(cookie, C.dir + "cookie.txt");
 
                     return BitmapFactory.decodeStream(conn.getInputStream());
 

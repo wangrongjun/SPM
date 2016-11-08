@@ -12,11 +12,11 @@ import com.google.gson.Gson;
 import com.homework.R;
 import com.homework.activity.common.BaseActivity;
 import com.homework.adapter.SchoolWorkListAdapter;
+import com.homework.bean.Course;
 import com.homework.bean.SchoolWork;
 import com.homework.bean.TeacherCourse;
 import com.homework.view.ToolBarView;
 import com.wang.android_lib.util.M;
-import com.wang.java_program.video_download.bean.Course;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -75,15 +75,15 @@ public class CourseInfoActivity extends BaseActivity {
             Course course = teacherCourse.getCourse();
             if (course != null) {
                 toolBar.setTitleText(course.getCourseName());
-                tvCourseHint.setText(course.getCourseHint());
-                List<String> chapterNames = course.getChapterNames();
-                if (chapterNames != null && chapterNames.size() > 0) {
-                    StringBuilder builder = new StringBuilder();
-                    for (String s : chapterNames) {
-                        builder.append(s).append("\n");
-                    }
-                    tvChapterName.setText(builder.toString());
-                }
+//                tvCourseHint.setText(course.getCourseHint());
+//                List<String> chapterNames = course.getChapterNames();
+//                if (chapterNames != null && chapterNames.size() > 0) {
+//                    StringBuilder builder = new StringBuilder();
+//                    for (String s : chapterNames) {
+//                        builder.append(s).append("\n");
+//                    }
+//                    tvChapterName.setText(builder.toString());
+//                }
             }
 
             Set<SchoolWork> schoolWorks = teacherCourse.getSchoolWorks();

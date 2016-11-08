@@ -8,11 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.homework.R;
+import com.homework.bean.Course;
 import com.homework.bean.Teacher;
 import com.homework.bean.TeacherCourse;
 import com.homework.bean.TeacherInformation;
 import com.homework.constant.C;
-import com.wang.java_program.video_download.bean.Course;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class CourseListAdapter extends BaseAdapter {
 
             Course course = new Course();
             course.setCourseName("courseName_" + i);
-            course.setCourseHint("courseHint_" + i);
+//            course.setCourseHint("courseHint_" + i);
 
             TeacherCourse teacherCourse = new TeacherCourse();
             teacherCourse.setTeacherCourseId(i);

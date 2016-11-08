@@ -9,9 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 
 import com.homework.R;
-import com.homework.fragment.GuideOneFragment;
-import com.homework.fragment.GuideThreeFragment;
-import com.homework.fragment.GuideTwoFragment;
+import com.homework.fragment.common.GuideOneFragment;
+import com.homework.fragment.common.GuideThreeFragment;
+import com.homework.fragment.common.GuideTwoFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

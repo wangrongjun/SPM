@@ -33,9 +33,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * by 王荣俊 on 2016/10/4.
+ * by wangrongjun on 2016/11/7.
  */
-public class StudentCourseFragment extends Fragment {
+public class TeacherCourseFragment extends Fragment {
 
     @Bind(R.id.lv_course)
     ListView lvCourse;
@@ -43,7 +43,7 @@ public class StudentCourseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_course, container, false);
+        View view = inflater.inflate(R.layout.fragment_teacher_course, container, false);
         ButterKnife.bind(this, view);
         initView();
         startGetCourseInfo();
@@ -80,19 +80,17 @@ public class StudentCourseFragment extends Fragment {
                     lvCourse.setAdapter(new CourseListAdapter(getActivity(), teacherCourseList));
                 } else {
                     M.t(getActivity(), pair.second + "");
-//                    TODO lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
-                    lvCourse.setAdapter(new CourseListAdapter(getActivity()));
+                    lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
                 }
             }
         });
         helper.setOnFailedListener(new AndroidHttpUtil.OnFailedListener() {
             @Override
             public void onFailed(HttpUtil.Result r) {
-//                TODO lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
-                lvCourse.setAdapter(new CourseListAdapter(getActivity()));
+                lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
             }
         });
-        helper.request(C.getStudentCourseInfoUrl(P.getStudent().getStudentId()));
+        helper.request(C.getTeacherCourseInfoUrl(P.getTeacher().getTeacherId()));
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.homework.bean;
 
-import com.wang.java_program.video_download.bean.Course;
-
 import java.util.HashSet;
 import java.util.Set;
 

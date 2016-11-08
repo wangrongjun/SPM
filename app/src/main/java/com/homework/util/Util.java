@@ -8,7 +8,21 @@ import com.homework.bean.Msg;
 import com.homework.constant.C;
 import com.wang.android_lib.util.M;
 import com.wang.java_util.Pair;
+import com.wang.java_util.TextUtil;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
@@ -54,6 +68,53 @@ public class Util {
         }
         Object o = "不存在的状态码：" + msg.getCode();
         return new Pair<>(false, o);
+    }
+
+    /**
+     * 教师发布课程作业
+     */
+    public static void addSchoolWork(int teacherCourseId,
+                                     String name,
+                                     String content,
+                                     String finalDate,
+                                     String extraFilePath) throws IOException {
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(C.addSchoolWorkUrl());
+
+        try {
+            MultipartEntity requestEntity = new MultipartEntity();
+            requestEntity.addPart("teacherCourseId", new StringBody(teacherCourseId + ""));
+            requestEntity.addPart("name", new StringBody(name));
+            if (!TextUtil.isEmpty(content)) {
+                requestEntity.addPart("content", new StringBody(content));
+            }
+            requestEntity.addPart("finalDate", new StringBody(finalDate));
+            if (!TextUtil.isEmpty(extraFilePath)) {
+                requestEntity.addPart("extraFile", new FileBody(new File(extraFilePath)));
+            }
+
+            httpPost.setEntity(requestEntity);
+            HttpResponse response = httpClient.execute(httpPost);
+
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == HttpStatus.SC_OK) {
+
+                HttpEntity responseEntity = response.getEntity();
+                System.out.println(EntityUtils.toString(responseEntity));//httpclient自带的工具类读取返回数据  
+                System.out.println(responseEntity.getContent());
+                EntityUtils.consume(responseEntity);
+
+            } else {
+                System.out.println("statusCode=" + statusCode);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            httpClient.getConnectionManager().shutdown();
+            throw e;
+        }
+
     }
 
 }

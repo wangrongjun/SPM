@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.homework.R;
 import com.homework.activity.common.LoginActivity;
-import com.homework.bean.Student;
-import com.homework.bean.StudentInformation;
+import com.homework.bean.Teacher;
+import com.homework.bean.TeacherInformation;
 import com.homework.constant.C;
 import com.homework.util.P;
 import com.wang.android_lib.util.DialogUtil;
@@ -25,7 +25,7 @@ import butterknife.OnClick;
 /**
  * by 王荣俊 on 2016/10/4.
  */
-public class StudentMeFragment extends Fragment {
+public class TeacherMeFragment extends Fragment {
 
     @Bind(R.id.tv_account)
     TextView tvAccount;
@@ -35,41 +35,29 @@ public class StudentMeFragment extends Fragment {
     TextView tvGender;
     @Bind(R.id.tv_age)
     TextView tvAge;
-    @Bind(R.id.tv_class)
-    TextView tvClass;
-    @Bind(R.id.tv_contact)
-    TextView tvContact;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_me, container, false);
+        View view = inflater.inflate(R.layout.fragment_teacher_me, container, false);
         ButterKnife.bind(this, view);
         initView();
         return view;
     }
 
     private void initView() {
-        Student student = P.getStudent();
-        StudentInformation information = student.getStudentInformation();
-        if (information == null) {
+        Teacher teacher = P.getTeacher();
+        TeacherInformation info = teacher.getTeacherInformation();
+        if (info == null) {
             return;
         }
 
-        tvAccount.setText(student.getAccount());
-        tvName.setText(information.getRealName());
-        String gender = information.getGender();
-        String className = "未知";
-        if (information.getStudentClass() != null) {
-            className = information.getStudentClass().getClassName();
-        }
-
+        tvAccount.setText(teacher.getAccount());
+        tvName.setText(info.getRealName());
+        String gender = info.getGender();
         tvGender.setText(TextUtil.isEmpty(gender) ? "保密" : gender);
-        int age = information.getAge();
+        int age = info.getAge();
         tvAge.setText(age < 0 ? "保密" : age + "");
-        tvClass.setText(className);
-        String email = information.getEmail();
-        tvContact.setText(TextUtil.isEmpty(email) ? "未填写" : email);
     }
 
     @Override
@@ -84,9 +72,9 @@ public class StudentMeFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Student student = P.getStudent();
-                        P.setStudent(null);
-                        LoginActivity.start(getActivity(), student.getAccount(), C.ROLE_STUDENT);
+                        Teacher teacher = P.getTeacher();
+                        P.setTeacher(null);
+                        LoginActivity.start(getActivity(), teacher.getAccount(), C.ROLE_TEACHER);
                         getActivity().finish();
                     }
                 });

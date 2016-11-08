@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.homework.view.ToolBarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="发布作业" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp">
+
+            <com.wang.android_lib.view.BorderEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:borderColor="@color/gray"
+                app:borderWidth="1px"
+                app:clearBtnIcon="@mipmap/btn_clear"
+                app:hint="作业标题"
+                app:leftIcon="@mipmap/ic_launcher"
+                app:textColor="@color/black" />
+
+            <com.wang.android_lib.view.BorderEditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                app:borderColor="@color/gray"
+                app:borderWidth="1px"
+                app:clearBtnIcon="@mipmap/btn_clear"
+                app:hint="作业内容"
+                app:leftIcon="@mipmap/ic_launcher"
+                app:textColor="@color/black" />
+
+            <com.wang.android_lib.view.BorderEditText
+                android:id="@+id/et_final_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                app:borderColor="@color/gray"
+                app:borderWidth="1px"
+                app:clearBtnIcon="@mipmap/btn_clear"
+                app:hint="截止日期，格式:yyyy-MM-dd HH:mm"
+                app:leftIcon="@mipmap/ic_launcher"
+                app:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btn_select_file"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn_blue_selector"
+                android:text="上传附件" />
+
+            <TextView
+                android:id="@+id/tv_file_path_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:alpha="0.8"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_add_school_work"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/btn_orange_selector"
+        android:text="发布"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.homework.bean.Student;
+import com.homework.bean.Teacher;
 import com.wang.android_lib.util.PrefUtil;
 
 /**
@@ -42,6 +43,17 @@ public class P extends PrefUtil {
             student = new Student();
         }
         setEntity(context, prefName, student);
+    }
+
+    public static Teacher getTeacher() {
+        return getEntity(context, prefName, Teacher.class);
+    }
+
+    public static void setTeacher(Teacher teacher) {
+        if (teacher == null) {
+            teacher = new Teacher();
+        }
+        setEntity(context, prefName, teacher);
     }
 
 }
