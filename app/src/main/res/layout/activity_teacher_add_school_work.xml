@@ -47,17 +47,63 @@
                 app:leftIcon="@mipmap/ic_launcher"
                 app:textColor="@color/black" />
 
-            <com.wang.android_lib.view.BorderEditText
-                android:id="@+id/et_final_date"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginTop="30dp"
-                app:borderColor="@color/gray"
-                app:borderWidth="1px"
-                app:clearBtnIcon="@mipmap/btn_clear"
-                app:hint="截止日期，格式:yyyy-MM-dd HH:mm"
-                app:leftIcon="@mipmap/ic_launcher"
-                app:textColor="@color/black" />
+                android:background="@drawable/btn_light_gray_selector"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="截止日期"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1px"
+                    android:background="@color/gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_final_date"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="yyyy-MM-dd"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/btn_final_time"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="HH:mm"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_select_file"

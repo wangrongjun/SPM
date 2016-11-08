@@ -35,9 +35,8 @@
         app:borderWidth="1dp"
         app:clearBtnIcon="@mipmap/btn_clear"
         app:hint="学号"
-        app:inputType="1"
         app:leftIcon="@mipmap/ic_et_id_number"
-        app:text="teacher1" />
+        app:text="11014" />
 
     <com.wang.android_lib.view.BorderEditText
         android:id="@+id/et_password"
