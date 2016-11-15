@@ -25,6 +25,7 @@ import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * by wangrongjun on 2016/11/1.
@@ -40,14 +41,20 @@ public class CourseInfoActivity extends BaseActivity {
     @Bind(R.id.lv_homework)
     ListView lvHomework;
 
+    private TeacherCourse teacherCourse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_info);
         ButterKnife.bind(this);
+        initData();
+        initView();
+    }
+
+    private void initData() {
         String json = getIntent().getStringExtra("teacherCourse");
-        TeacherCourse teacherCourse = new Gson().fromJson(json, TeacherCourse.class);
-        initView(teacherCourse);
+        teacherCourse = new Gson().fromJson(json, TeacherCourse.class);
     }
 
     public static void start(Context context, TeacherCourse teacherCourse) {
@@ -56,7 +63,7 @@ public class CourseInfoActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
-    private void initView(TeacherCourse teacherCourse) {
+    private void initView() {
         toolBar.setOnBtnRightTextClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,5 +108,10 @@ public class CourseInfoActivity extends BaseActivity {
             }
         }
 
+    }
+
+    @OnClick(R.id.btn_add_school_work)
+    public void onClick() {
+        TeacherAddSchoolWorkActivity.start(this, teacherCourse);
     }
 }

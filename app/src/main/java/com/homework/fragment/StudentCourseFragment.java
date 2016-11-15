@@ -12,7 +12,7 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.CourseInfoActivity;
-import com.homework.adapter.CourseListAdapter;
+import com.homework.adapter.TeacherCourseListAdapter;
 import com.homework.bean.Msg;
 import com.homework.bean.TeacherCourse;
 import com.homework.constant.C;
@@ -77,11 +77,12 @@ public class StudentCourseFragment extends Fragment {
                 Pair<Boolean, Object> pair = Util.handleMsg(getActivity(), r.result, type);
                 if (pair.first) {
                     List<TeacherCourse> teacherCourseList = (List<TeacherCourse>) pair.second;
-                    lvCourse.setAdapter(new CourseListAdapter(getActivity(), teacherCourseList));
+                    //TODO
+//                    lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity(), teacherCourseList));
                 } else {
                     M.t(getActivity(), pair.second + "");
 //                    TODO lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
-                    lvCourse.setAdapter(new CourseListAdapter(getActivity()));
+                    lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity()));
                 }
             }
         });
@@ -89,7 +90,7 @@ public class StudentCourseFragment extends Fragment {
             @Override
             public void onFailed(HttpUtil.Result r) {
 //                TODO lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
-                lvCourse.setAdapter(new CourseListAdapter(getActivity()));
+                lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity()));
             }
         });
         helper.request(C.getStudentCourseInfoUrl(P.getStudent().getStudentId()));

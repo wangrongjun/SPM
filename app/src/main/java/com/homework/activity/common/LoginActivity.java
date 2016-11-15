@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -67,16 +68,26 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        String number = getIntent().getStringExtra("account");
+        String account = getIntent().getStringExtra("account");
         int role = getIntent().getIntExtra("role", C.ROLE_STUDENT);
-        if (!TextUtil.isEmpty(number)) {
-            if (role == C.ROLE_STUDENT) {
-                rbStudent.setChecked(true);
-            } else if (role == C.ROLE_TEACHER) {
-                rbStudent.setChecked(false);
-            }
-            etNumber.setText(number);
+        if (!TextUtil.isEmpty(account)) {
+            rbStudent.setChecked(role == C.ROLE_STUDENT);
+            etNumber.setText(account);
         }
+
+        //TODO delete
+        rbStudent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    etNumber.setText("3114006500");
+                    etPassword.setText("123456");
+                } else {
+                    etNumber.setText("teacher1");
+                    etPassword.setText("123456");
+                }
+            }
+        });
 
     }
 

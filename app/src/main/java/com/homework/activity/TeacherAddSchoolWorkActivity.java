@@ -1,17 +1,21 @@
 package com.homework.activity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
+import com.google.gson.Gson;
 import com.homework.R;
 import com.homework.activity.common.BaseActivity;
+import com.homework.bean.TeacherCourse;
 import com.wang.android_lib.util.IntentUtil;
 import com.wang.android_lib.util.M;
 import com.wang.android_lib.view.BorderEditText;
@@ -36,10 +40,6 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
     BorderEditText etName;
     @Bind(R.id.et_content)
     BorderEditText etContent;
-    @Bind(R.id.btn_select_file)
-    Button btnSelectFile;
-    @Bind(R.id.btn_add_school_work)
-    Button btnAddSchoolWork;
     @Bind(R.id.tv_file_path_list)
     TextView tvFilePathList;
     @Bind(R.id.btn_final_date)
@@ -49,8 +49,11 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
 
     private List<String> filePathList;
 
-    private SimpleDateFormat sdf;
+    private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
     private Calendar calendar;
+
+    private TeacherCourse teacherCourse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,17 +65,27 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         initView();
     }
 
+    public static void start(Context context, TeacherCourse teacherCourse) {
+        Intent intent = new Intent(context, TeacherAddSchoolWorkActivity.class);
+        intent.putExtra("teacherCourse", new Gson().toJson(teacherCourse));
+        context.startActivity(intent);
+    }
+
     private void initData() {
+        String teacherCourseJson = getIntent().getStringExtra("teacherCourse");
+        teacherCourse = new Gson().fromJson(teacherCourseJson, TeacherCourse.class);
+        if (teacherCourse == null) {
+            teacherCourse = new TeacherCourse();
+        }
         filePathList = new ArrayList<>();
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);//一周后
-        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//        sdf.format(new Date(calendar.getTimeInMillis()));
     }
 
     private void initView() {
         etContent.setText("没有作业内容");
-//        tvFinalDate.setText(sdf.format(date));
+        btnFinalDate.setText(sdfDate.format(new Date(calendar.getTimeInMillis())));
+        btnFinalTime.setText(sdfTime.format(new Date(calendar.getTimeInMillis())));
     }
 
     private void updateFileListView() {
@@ -97,14 +110,13 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
             case R.id.btn_add_school_work:
                 String name = etName.getText();
                 String content = etContent.getText();
-                String finalDate = btnFinalDate.getText().toString();
-                if (!TextUtil.isEmpty(name, content, finalDate)) {
+                if (!TextUtil.isEmpty(name, content)) {
                     if (name.length() > 36) {
                         M.t(this, "作业标题不能超过36个字符");
                     } else if (content.length() > 512) {
                         M.t(this, "作业内容不能超过512个字符");
                     } else {
-                        startAddSchoolWork(name, content, finalDate);
+                        startAddSchoolWork(name, content);
                     }
                 } else {
                     M.t(this, "请填写信息");
@@ -118,8 +130,7 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 calendar.set(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                btnFinalDate.setText(sdf.format(new Date(calendar.getTimeInMillis())));
+                btnFinalDate.setText(sdfDate.format(new Date(calendar.getTimeInMillis())));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         dialog.setTitle("请选择截止日期");
@@ -127,10 +138,21 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
     }
 
     private void showTimePickerDialog() {
+        TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                btnFinalTime.setText(sdfTime.format(new Date(calendar.getTimeInMillis())));
+            }
+
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+        dialog.setTitle("请选择截止时间");
+        dialog.show();
     }
 
-    private void startAddSchoolWork(String name, String content, String finalDate) {
+    private void startAddSchoolWork(String name, String content) {
         M.t(this, "开始发布");
     }
 

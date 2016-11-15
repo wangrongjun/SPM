@@ -8,6 +8,14 @@ public class StudentClass {
     private int studentClassId;// 班级Id
     private String className;// 班级名
 
+    public StudentClass() {
+    }
+
+    public StudentClass(int studentClassId, String className) {
+        this.studentClassId = studentClassId;
+        this.className = className;
+    }
+
     public int getStudentClassId() {
         return studentClassId;
     }

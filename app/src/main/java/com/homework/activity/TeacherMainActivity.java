@@ -106,9 +106,10 @@ public class TeacherMainActivity extends BaseActivity {
             }
         });
         //设置左右缓存页面数为3，避免重复加载
-//        viewPager.setOffscreenPageLimit(3);
-        viewPager.setOffscreenPageLimit(1);//测试用
+        viewPager.setOffscreenPageLimit(3);
     }
+
+    private boolean isFirstCourseFragmentStartGetCourseInfo = true;
 
     /**
      * 换页
@@ -116,6 +117,20 @@ public class TeacherMainActivity extends BaseActivity {
     private void changePage(int position) {
         viewPager.setCurrentItem(position, false);
         changeTab(position);
+
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                if (isFirstCourseFragmentStartGetCourseInfo) {
+                    courseFragment.startGetCourseInfo();
+                    isFirstCourseFragmentStartGetCourseInfo = false;
+                }
+                break;
+            case 2:
+                break;
+        }
+
     }
 
     private void changeTab(int position) {

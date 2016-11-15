@@ -36,7 +36,7 @@
         app:clearBtnIcon="@mipmap/btn_clear"
         app:hint="学号"
         app:leftIcon="@mipmap/ic_et_id_number"
-        app:text="11014" />
+        app:text="teacher1" />
 
     <com.wang.android_lib.view.BorderEditText
         android:id="@+id/et_password"
@@ -65,7 +65,6 @@
             android:id="@+id/rb_student"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="学生"
             android:textColor="@color/white"
             android:textSize="14sp" />
@@ -75,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:checked="true"
             android:text="教师"
             android:textColor="@color/white"
             android:textSize="14sp" />

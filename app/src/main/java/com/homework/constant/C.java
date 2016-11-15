@@ -40,12 +40,13 @@ public class C {
 
     /**
      * 获取指定编号老师上的课程的学生班级
-     * 请求方式:GET
+     * 请求方式:GET  url示例:123.207.87.197:8080/homework/teacherCourse/studentClasses/1
      *
-     * @return Map<Integer, List<Integer>>转成的json(键为课程编号,值List表示该课程下的班级编号集合)
-     * {"code":0,"message":{"1":[1]}}
+     * @return Map<Integer, new Object[]>转成的json(键为课程编号,值Object[]第一个元素为课程名，
+     * 第二个元素表示该课程下的班级编号集合)
+     * {"code":0,"message":{"1":["软件工程",[1]]}}
      */
-    public static String getTeacherCourseInfoUrl(int teacherId) {
+    public static String getTeacherClassListUrl(int teacherId) {
         return hostUrl + "/teacherCourse/studentClasses/" + teacherId;
     }
 
@@ -61,12 +62,12 @@ public class C {
 
     /**
      * 教师发布课程作业
+     *
      * @return
      */
     public static String addSchoolWorkUrl() {
         return hostUrl + "/schoolWork";
     }
-    
-    
+
 
 }

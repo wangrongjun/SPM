@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import com.homework.R;
 import com.homework.bean.Course;
+import com.homework.bean.StudentClass;
 import com.homework.bean.Teacher;
 import com.homework.bean.TeacherCourse;
 import com.homework.bean.TeacherInformation;
-import com.homework.constant.C;
+import com.wang.java_util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -23,17 +23,19 @@ import butterknife.ButterKnife;
 /**
  * by wangrongjun on 2016/11/1.
  */
-public class CourseListAdapter extends BaseAdapter {
+public class TeacherCourseListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<TeacherCourse> teacherCourseList;
+    private List<Pair<TeacherCourse, List<StudentClass>>> teacherCourseList;
 
-    public CourseListAdapter(Context context, List<TeacherCourse> teacherCourseList) {
+    public TeacherCourseListAdapter(
+            Context context, List<Pair<TeacherCourse, List<StudentClass>>> teacherCourseList) {
         this.context = context;
         this.teacherCourseList = teacherCourseList;
     }
 
-    public CourseListAdapter(Context context) {
+    //TODO delete
+    public TeacherCourseListAdapter(Context context) {/*
         this.context = context;
         teacherCourseList = new ArrayList<>();
         for (int i = 1; i <= 20; i++) {
@@ -47,9 +49,7 @@ public class CourseListAdapter extends BaseAdapter {
             teacher.setTeacherInformation(info);
             teacher.setRole(C.ROLE_STUDENT);
 
-            Course course = new Course();
-            course.setCourseName("courseName_" + i);
-//            course.setCourseHint("courseHint_" + i);
+            Course course = new Course("courseName_" + i);
 
             TeacherCourse teacherCourse = new TeacherCourse();
             teacherCourse.setTeacherCourseId(i);
@@ -57,7 +57,7 @@ public class CourseListAdapter extends BaseAdapter {
             teacherCourse.setTeacher(teacher);
 
             teacherCourseList.add(teacherCourse);
-        }
+        }*/
     }
 
     @Override
@@ -90,7 +90,7 @@ public class CourseListAdapter extends BaseAdapter {
     }
 
     private void updateView(ViewHolder holder, int position) {
-        TeacherCourse teacherCourse = teacherCourseList.get(position);
+        TeacherCourse teacherCourse = teacherCourseList.get(position).first;
         Course course = teacherCourse.getCourse();
         Teacher teacher = teacherCourse.getTeacher();
         if (course != null) {
