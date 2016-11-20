@@ -7,12 +7,13 @@ import com.google.gson.JsonSyntaxException;
 import com.homework.bean.Msg;
 import com.homework.constant.C;
 import com.wang.android_lib.util.M;
+import com.wang.java_util.DebugUtil;
+import com.wang.java_util.JsonFormatUtil;
 import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -30,6 +31,7 @@ import java.lang.reflect.Type;
  */
 public class Util {
     /**
+     * 注意，第一个返回值为false默认已经弹出提示，无需再次再提示。
      * 使用样例：
      * <p/>
      * Type type = new TypeToken<Msg<List<Student>>>() {
@@ -41,50 +43,55 @@ public class Util {
      * } else {
      * M.t(getActivity(), pair.second + "");
      * }
-     *
-     * @param context
-     * @param result
-     * @param type
-     * @return
      */
     public static Pair<Boolean, Object> handleMsg(Context context, String result, Type type) {
-        Msg msg;
+
+        DebugUtil.println(JsonFormatUtil.formatJson(result));
+
         try {
-            msg = new Gson().fromJson(result, type);
+            Msg msg = new Gson().fromJson(result, Msg.class);
+            switch (msg.getCode()) {
+                case C.CODE_OK:
+                    msg = new Gson().fromJson(result, type);
+                    return new Pair<>(true, msg.getMessage());
+                case C.CODE_ERROR_NORMAL:
+                case C.CODE_ERROR_STORAGE:
+                case C.CODE_ILLEGAL:
+                case C.CODE_ERROR_UNKNOWN:
+                    M.t(context, msg.getMessage() + "");
+                    return new Pair<>(false, null);
+                default:
+                    M.t(context, "没有该状态码：" + msg.getCode());
+                    return new Pair<>(false, null);
+            }
+
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
-            msg = new Gson().fromJson(result, Msg.class);
-            return new Pair<>(false, msg.getMessage());
+            M.t(context, "程序出错，json解析失败");
+            return new Pair<>(false, null);
         }
-        switch (msg.getCode()) {
-            case C.CODE_OK:
-                return new Pair<>(true, msg.getMessage());
-            case C.CODE_ERROR_NORMAL:
-            case C.CODE_ERROR_STORAGE:
-            case C.CODE_ILLEGAL:
-            case C.CODE_ERROR_UNKNOWN:
-                M.t(context, msg.getMessage() + "");
-                break;
-        }
-        Object o = "不存在的状态码：" + msg.getCode();
-        return new Pair<>(false, o);
+
     }
 
     /**
      * 教师发布课程作业
+     * http://blog.csdn.net/Just_szl/article/details/7659347
+     *
+     * @return HttpStatus类的状态码 + 服务器返回的结果字符串
      */
-    public static void addSchoolWork(int teacherCourseId,
-                                     String name,
-                                     String content,
-                                     String finalDate,
-                                     String extraFilePath) throws IOException {
+    public static Pair<Integer, String> addSchoolWork(int teacherCourseId,
+                                                      String name,
+                                                      String content,
+                                                      String finalDate,
+                                                      String extraFilePath,
+                                                      String cookie) throws IOException {
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(C.addSchoolWorkUrl());
 
         try {
             MultipartEntity requestEntity = new MultipartEntity();
-            requestEntity.addPart("teacherCourseId", new StringBody(teacherCourseId + ""));
+            requestEntity.addPart("teacherCourse.teacherCourseId", new StringBody(teacherCourseId + ""));
             requestEntity.addPart("name", new StringBody(name));
             if (!TextUtil.isEmpty(content)) {
                 requestEntity.addPart("content", new StringBody(content));
@@ -94,22 +101,17 @@ public class Util {
                 requestEntity.addPart("extraFile", new FileBody(new File(extraFilePath)));
             }
 
+            httpPost.addHeader("Cookie", cookie);
             httpPost.setEntity(requestEntity);
             HttpResponse response = httpClient.execute(httpPost);
 
             int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode == HttpStatus.SC_OK) {
+            HttpEntity responseEntity = response.getEntity();
+            String result = EntityUtils.toString(responseEntity);//httpclient的工具类读取返回数据
 
-                HttpEntity responseEntity = response.getEntity();
-                System.out.println(EntityUtils.toString(responseEntity));//httpclient自带的工具类读取返回数据  
-                System.out.println(responseEntity.getContent());
-                EntityUtils.consume(responseEntity);
+            return new Pair<>(statusCode, result);
 
-            } else {
-                System.out.println("statusCode=" + statusCode);
-            }
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             httpClient.getConnectionManager().shutdown();
             throw e;

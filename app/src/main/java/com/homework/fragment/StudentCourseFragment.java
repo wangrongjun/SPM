@@ -22,7 +22,6 @@ import com.wang.android_lib.adapter.LoadingAdapter;
 import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
-import com.wang.android_lib.util.M;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 
@@ -80,8 +79,7 @@ public class StudentCourseFragment extends Fragment {
                     //TODO
 //                    lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity(), teacherCourseList));
                 } else {
-                    M.t(getActivity(), pair.second + "");
-//                    TODO lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+//                    lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
                     lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity()));
                 }
             }

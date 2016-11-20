@@ -9,8 +9,8 @@ import java.util.Set;
 public class TeacherCourse {
 
     private int teacherCourseId;// 授课Id
-    private Course course;// 课程
-    private Teacher teacher;// 上课的老师
+    private Course course = new Course("无");// 课程
+    private Teacher teacher = new Teacher();// 上课的老师
     private Set<Student> students = new HashSet<>();// 教导的学生
     private Set<SchoolWork> schoolWorks = new HashSet<>();// 发布的作业
 

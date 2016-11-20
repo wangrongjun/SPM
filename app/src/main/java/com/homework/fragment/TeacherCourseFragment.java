@@ -56,12 +56,6 @@ public class TeacherCourseFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("onResume-------------------------------");
-    }
-
     private void initView() {
         lvCourse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,7 +63,7 @@ public class TeacherCourseFragment extends Fragment {
                 if (id == NullAdapter.NULL_ADAPTER_ID) {//如果是空适配器，即加载失败
                     startGetCourseInfo();
                 } else if (id != LoadingAdapter.LOADING_ADAPTER_ID) {//若当前不是查询中，即已加载完成
-                    TeacherCourse tc = (TeacherCourse) lvCourse.getAdapter().getItem(position);
+                    TeacherCourse tc = dataList.get(position).first;
                     CourseInfoActivity.start(getActivity(), tc);
                 }
             }
@@ -91,7 +85,6 @@ public class TeacherCourseFragment extends Fragment {
                     Map<Integer, Object[]> map = (Map<Integer, Object[]>) pair.second;
                     showListData(map);
                 } else {
-                    M.t(getActivity(), pair.second + "");
                     lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
                 }
             }

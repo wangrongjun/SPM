@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -13,19 +14,27 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.common.BaseActivity;
+import com.homework.bean.Msg;
 import com.homework.bean.TeacherCourse;
+import com.homework.util.P;
+import com.homework.util.Util;
+import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.IntentUtil;
 import com.wang.android_lib.util.M;
 import com.wang.android_lib.view.BorderEditText;
+import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
 
+import org.apache.http.HttpStatus;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,8 +55,10 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
     TextView btnFinalDate;
     @Bind(R.id.btn_final_time)
     TextView btnFinalTime;
+    @Bind(R.id.tv_teacher_course_name)
+    TextView tvTeacherCourseName;
 
-    private List<String> filePathList;
+    private String filePath;
 
     private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
@@ -71,28 +82,27 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    /**
+     * 初始化teacherCourse和calendar
+     */
     private void initData() {
         String teacherCourseJson = getIntent().getStringExtra("teacherCourse");
         teacherCourse = new Gson().fromJson(teacherCourseJson, TeacherCourse.class);
         if (teacherCourse == null) {
             teacherCourse = new TeacherCourse();
         }
-        filePathList = new ArrayList<>();
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);//一周后
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);//默认的截止时间是一周后的中午12点
     }
 
     private void initView() {
+        tvTeacherCourseName.setText(teacherCourse.getCourse().getCourseName());
         etContent.setText("没有作业内容");
         btnFinalDate.setText(sdfDate.format(new Date(calendar.getTimeInMillis())));
         btnFinalTime.setText(sdfTime.format(new Date(calendar.getTimeInMillis())));
-    }
-
-    private void updateFileListView() {
-        tvFilePathList.setText("");
-        for (int i = 0; i < filePathList.size(); i++) {
-            tvFilePathList.append((i + 1) + ". " + filePathList.get(i) + "\n\n");
-        }
     }
 
     @OnClick({R.id.btn_select_file, R.id.btn_add_school_work, R.id.btn_final_date, R.id.btn_final_time})
@@ -152,8 +162,62 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         dialog.show();
     }
 
-    private void startAddSchoolWork(String name, String content) {
-        M.t(this, "开始发布");
+    private static final int ERROR = 35344;
+
+    private void startAddSchoolWork(final String name, final String content) {
+
+        DialogUtil.showProgressDialog(this, "正在发布");
+
+        new AsyncTask<Void, Void, Pair<Integer, String>>() {
+
+            @Override
+            protected Pair<Integer, String> doInBackground(Void... params) {
+                try {
+                    return Util.addSchoolWork(
+                            teacherCourse.getTeacherCourseId(),
+                            name,
+                            content,
+                            sdfDate.format(new Date(calendar.getTimeInMillis())) + " " +
+                                    sdfTime.format(new Date(calendar.getTimeInMillis())),
+                            filePath,
+                            P.getCookie()
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return new Pair<>(ERROR, e.toString());
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Pair<Integer, String> scResultPair) {
+
+                DialogUtil.cancelProgressDialog();
+
+                int code = scResultPair.first;
+                String result = scResultPair.second;
+                switch (code) {
+                    case ERROR:
+                        M.t(TeacherAddSchoolWorkActivity.this, "网络异常，" + result);
+                        break;
+                    default:
+                        M.t(TeacherAddSchoolWorkActivity.this, "服务器异常，" + result);
+                        break;
+                    case HttpStatus.SC_OK:
+                        handleResult(result);
+                        break;
+                }
+            }
+
+        }.execute();
+    }
+
+    private void handleResult(String result) {
+        Type type = new TypeToken<Msg<String>>() {
+        }.getType();
+        Pair<Boolean, Object> booleanObjectPair = Util.handleMsg(this, result, type);
+        if (booleanObjectPair.first) {
+            M.t(this, "发布成功，" + booleanObjectPair.second);
+        }
     }
 
     @Override
@@ -164,7 +228,8 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         Uri uri = data.getData();
         if (uri == null) return;
 
-        filePathList.add(uri.getPath());
-        updateFileListView();
+        filePath = uri.getPath();
+        tvFilePathList.setText(filePath);
     }
+
 }

@@ -7,7 +7,7 @@ public class Teacher {
 
     private int teacherId;
     private String account;
-    private TeacherInformation teacherInformation;
+    private TeacherInformation teacherInformation = new TeacherInformation();
     private int role;
 
     public int getTeacherId() {

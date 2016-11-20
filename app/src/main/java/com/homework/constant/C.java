@@ -62,12 +62,9 @@ public class C {
 
     /**
      * 教师发布课程作业
-     *
-     * @return
      */
     public static String addSchoolWorkUrl() {
         return hostUrl + "/schoolWork";
     }
-
 
 }

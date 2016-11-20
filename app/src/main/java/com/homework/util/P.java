@@ -24,11 +24,17 @@ public class P extends PrefUtil {
         return isFirst(context, prefName);
     }
 
+    /**
+     * 设置到Cookie
+     */
     public static String getCookie() {
         SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         return pref.getString("cookie", null);
     }
 
+    /**
+     * 在获取验证码和登录成功时从Set-Cookie中获取
+     */
     public static void setCookie(String cookie) {
         SharedPreferences pref = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         pref.edit().putString("cookie", cookie).apply();

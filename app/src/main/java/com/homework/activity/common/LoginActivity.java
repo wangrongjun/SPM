@@ -142,8 +142,6 @@ public class LoginActivity extends Activity {
                         P.setStudent(student);
                         startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
                         finish();
-                    } else {
-                        M.t(LoginActivity.this, pair.second + "");
                     }
 
                 } else if (role == C.ROLE_TEACHER) {
@@ -155,8 +153,6 @@ public class LoginActivity extends Activity {
                         P.setTeacher(teacher);
                         startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
                         finish();
-                    } else {
-                        M.t(LoginActivity.this, pair.second + "");
                     }
 
                 } else {

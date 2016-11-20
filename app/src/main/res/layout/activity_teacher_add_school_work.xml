@@ -24,10 +24,21 @@
             android:paddingRight="10dp"
             android:paddingTop="20dp">
 
+            <TextView
+                android:id="@+id/tv_teacher_course_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:maxLines="3"
+                android:text="课程名称"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
             <com.wang.android_lib.view.BorderEditText
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="20dp"
                 app:borderColor="@color/gray"
                 app:borderWidth="1px"
                 app:clearBtnIcon="@mipmap/btn_clear"

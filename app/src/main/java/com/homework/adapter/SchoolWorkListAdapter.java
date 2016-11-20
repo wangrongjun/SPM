@@ -11,8 +11,6 @@ import com.homework.R;
 import com.homework.bean.SchoolWork;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -30,7 +28,7 @@ public class SchoolWorkListAdapter extends BaseAdapter {
         this.context = context;
         this.schoolWorkList = schoolWorkList;
     }
-
+/*
     public SchoolWorkListAdapter(Context context) {
         this.context = context;
         schoolWorkList = new ArrayList<>();
@@ -43,7 +41,7 @@ public class SchoolWorkListAdapter extends BaseAdapter {
             work.setFinalDate(new Date(2016, 5, i + 10));
             schoolWorkList.add(work);
         }
-    }
+    }*/
 
     @Override
     public int getCount() {

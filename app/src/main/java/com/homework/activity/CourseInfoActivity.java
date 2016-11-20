@@ -6,22 +6,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.common.BaseActivity;
 import com.homework.adapter.SchoolWorkListAdapter;
 import com.homework.bean.Course;
+import com.homework.bean.Msg;
 import com.homework.bean.SchoolWork;
 import com.homework.bean.TeacherCourse;
+import com.homework.constant.C;
+import com.homework.util.P;
+import com.homework.util.Util;
 import com.homework.view.ToolBarView;
+import com.wang.android_lib.adapter.LoadingAdapter;
+import com.wang.android_lib.helper.AndroidHttpHelper;
+import com.wang.android_lib.util.AndroidHttpUtil;
 import com.wang.android_lib.util.M;
+import com.wang.java_util.HttpUtil;
+import com.wang.java_util.Pair;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,14 +42,12 @@ public class CourseInfoActivity extends BaseActivity {
 
     @Bind(R.id.tool_bar)
     ToolBarView toolBar;
-    @Bind(R.id.tv_course_hint)
-    TextView tvCourseHint;
-    @Bind(R.id.tv_chapter_name)
-    TextView tvChapterName;
-    @Bind(R.id.lv_homework)
-    ListView lvHomework;
+    @Bind(R.id.lv_school_work)
+    ListView lvSchoolWork;
 
     private TeacherCourse teacherCourse;
+
+    private SchoolWorkListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +56,18 @@ public class CourseInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
         initData();
         initView();
-    }
-
-    private void initData() {
-        String json = getIntent().getStringExtra("teacherCourse");
-        teacherCourse = new Gson().fromJson(json, TeacherCourse.class);
+        startGetSchoolWork();
     }
 
     public static void start(Context context, TeacherCourse teacherCourse) {
         Intent intent = new Intent(context, CourseInfoActivity.class);
         intent.putExtra("teacherCourse", new Gson().toJson(teacherCourse));
         context.startActivity(intent);
+    }
+
+    private void initData() {
+        String json = getIntent().getStringExtra("teacherCourse");
+        teacherCourse = new Gson().fromJson(json, TeacherCourse.class);
     }
 
     private void initView() {
@@ -71,42 +78,56 @@ public class CourseInfoActivity extends BaseActivity {
             }
         });
 
-        lvHomework.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvSchoolWork.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(new Intent(CourseInfoActivity.this, SchoolWorkInfoActivity.class));
             }
         });
 
-        if (teacherCourse != null) {
-            Course course = teacherCourse.getCourse();
-            if (course != null) {
-                toolBar.setTitleText(course.getCourseName());
-//                tvCourseHint.setText(course.getCourseHint());
-//                List<String> chapterNames = course.getChapterNames();
-//                if (chapterNames != null && chapterNames.size() > 0) {
-//                    StringBuilder builder = new StringBuilder();
-//                    for (String s : chapterNames) {
-//                        builder.append(s).append("\n");
-//                    }
-//                    tvChapterName.setText(builder.toString());
-//                }
-            }
-
-            Set<SchoolWork> schoolWorks = teacherCourse.getSchoolWorks();
-            if (schoolWorks != null) {
-                List<SchoolWork> schoolWorkList = new ArrayList<>();
-                Iterator<SchoolWork> iterator = schoolWorks.iterator();
-                while (iterator.hasNext()) {
-                    schoolWorkList.add(iterator.next());
-                }
-//                lvHomework.setAdapter(new SchoolWorkListAdapter(this, schoolWorkList));
-                lvHomework.setAdapter(new SchoolWorkListAdapter(this));
-            } else {
-                M.t(this, "暂无作业");
-                lvHomework.setAdapter(new SchoolWorkListAdapter(this));
-            }
+        Course course = teacherCourse.getCourse();
+        if (course != null) {
+            toolBar.setTitleText(course.getCourseName());
         }
+
+    }
+
+    private void startGetSchoolWork() {
+
+        lvSchoolWork.setAdapter(new LoadingAdapter(this));
+
+        String date = "";
+        try {
+            date = URLEncoder.encode("2000-01-01 12:00", "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = C.getSchoolWorkUrl(teacherCourse.getTeacherCourseId(), date);
+        AndroidHttpHelper helper = new AndroidHttpHelper(this);
+        helper.addRequestProperty("Cookie", P.getCookie());
+        helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
+            @Override
+            public void onSucceed(HttpUtil.Result r) {
+
+                Type type = new TypeToken<Msg<SchoolWork>>() {
+                }.getType();
+                Pair<Boolean, Object> pair = Util.handleMsg(CourseInfoActivity.this, r.result, type);
+                if (pair.first) {
+                    Object second = pair.second;
+                    M.t(CourseInfoActivity.this, second + "");
+                } else {
+                    lvSchoolWork.setAdapter(null);
+                }
+
+            }
+        });
+        helper.setOnFailedListener(new AndroidHttpUtil.OnFailedListener() {
+            @Override
+            public void onFailed(HttpUtil.Result r) {
+                lvSchoolWork.setAdapter(null);
+            }
+        });
+        helper.request(url);
 
     }
 

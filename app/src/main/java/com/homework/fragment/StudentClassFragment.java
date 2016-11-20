@@ -89,7 +89,6 @@ public class StudentClassFragment extends Fragment {
                     List<Student> studentList = (List<Student>) pair.second;
                     lvStudent.setAdapter(new StudentListAdapter(getActivity(), studentList));
                 } else {
-                    M.t(getActivity(), pair.second + "");
                     lvStudent.setAdapter(new NullAdapter(getActivity(), "重新获取"));
                 }
             }
