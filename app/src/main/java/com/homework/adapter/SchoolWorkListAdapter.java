@@ -28,20 +28,6 @@ public class SchoolWorkListAdapter extends BaseAdapter {
         this.context = context;
         this.schoolWorkList = schoolWorkList;
     }
-/*
-    public SchoolWorkListAdapter(Context context) {
-        this.context = context;
-        schoolWorkList = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
-            SchoolWork work = new SchoolWork();
-            work.setSchoolWorkId(i);
-            work.setName("homework_name_" + i);
-            work.setContent("content_" + i);
-            work.setCreateDate(new Date(2016, 5, i + 1));
-            work.setFinalDate(new Date(2016, 5, i + 10));
-            schoolWorkList.add(work);
-        }
-    }*/
 
     @Override
     public int getCount() {
@@ -76,10 +62,11 @@ public class SchoolWorkListAdapter extends BaseAdapter {
         SchoolWork schoolWork = schoolWorkList.get(position);
         holder.tvSchoolWorkName.setText(schoolWork.getName());
         holder.tvSchoolWorkContent.setText(schoolWork.getContent());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String createDate = sdf.format(schoolWork.getCreateDate());
         String finalDate = sdf.format(schoolWork.getFinalDate());
-        holder.tvDate.setText(createDate + "\n" + finalDate);
+        holder.tvDate.setText("发布时间：" + createDate + "\n截止时间：" + finalDate);
+        holder.tvCommitWorkCount.setText(schoolWork.getCommitWorkCount() + "");
     }
 
     static class ViewHolder {
@@ -89,6 +76,8 @@ public class SchoolWorkListAdapter extends BaseAdapter {
         TextView tvDate;
         @Bind(R.id.tv_school_work_content)
         TextView tvSchoolWorkContent;
+        @Bind(R.id.tv_commit_work_count)
+        TextView tvCommitWorkCount;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

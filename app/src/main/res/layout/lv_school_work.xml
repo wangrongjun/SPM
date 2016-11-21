@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
@@ -26,7 +26,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="创建日期\n截至日期"
+            android:text="发布时间\n截至时间"
             android:textColor="@color/black"
             android:textSize="12sp" />
 
@@ -44,11 +44,25 @@
 
         <TextView
             android:id="@+id/tv_school_work_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:maxLines="2"
             android:text="作业题目详情"
             android:textColor="@color/gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交："
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_commit_work_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交数量"
             android:textSize="12sp" />
 
     </LinearLayout>

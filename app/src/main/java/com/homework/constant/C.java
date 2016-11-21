@@ -5,7 +5,8 @@ package com.homework.constant;
  */
 public class C {
 
-    public static final String hostUrl = "http://123.207.87.197:8080/homework";
+    //    public static final String hostUrl = "http://123.207.87.197:8080/homework";
+    public static final String hostUrl = "http://coolgmr.com:8080/homework";
 
     public static String dir;
 
@@ -57,7 +58,8 @@ public class C {
      * @return SchoolWork转成的json(作业名, 内容, 截止日期, 附件, 修改日期, 创建日期, 提交的数量)
      */
     public static String getSchoolWorkUrl(int teacherCourseId, String date) {
-        return hostUrl + "/schoolWork/" + teacherCourseId + "/" + date;
+        //后台规定了空格在url中编码为%20
+        return hostUrl + "/schoolWork/" + teacherCourseId + "/" + date.replace(" ", "%20");
     }
 
     /**

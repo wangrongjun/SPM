@@ -1,8 +1,8 @@
 package com.homework.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -76,10 +76,14 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         initView();
     }
 
-    public static void start(Context context, TeacherCourse teacherCourse) {
-        Intent intent = new Intent(context, TeacherAddSchoolWorkActivity.class);
+    private static int resultCode;
+
+    public static void start(Activity activity, TeacherCourse teacherCourse,
+                             int requestCode, int resultCode) {
+        TeacherAddSchoolWorkActivity.resultCode = resultCode;
+        Intent intent = new Intent(activity, TeacherAddSchoolWorkActivity.class);
         intent.putExtra("teacherCourse", new Gson().toJson(teacherCourse));
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -182,7 +186,7 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
                             filePath,
                             P.getCookie()
                     );
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return new Pair<>(ERROR, e.toString());
                 }
@@ -217,6 +221,8 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         Pair<Boolean, Object> booleanObjectPair = Util.handleMsg(this, result, type);
         if (booleanObjectPair.first) {
             M.t(this, "发布成功，" + booleanObjectPair.second);
+            setResult(resultCode);
+            finish();
         }
     }
 

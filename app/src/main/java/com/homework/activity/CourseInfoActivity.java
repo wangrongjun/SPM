@@ -21,15 +21,16 @@ import com.homework.util.P;
 import com.homework.util.Util;
 import com.homework.view.ToolBarView;
 import com.wang.android_lib.adapter.LoadingAdapter;
+import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
-import com.wang.android_lib.util.M;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
+import com.wang.test.ISort;
+import com.wang.test.SortHelper;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -81,7 +82,9 @@ public class CourseInfoActivity extends BaseActivity {
         lvSchoolWork.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(CourseInfoActivity.this, SchoolWorkInfoActivity.class));
+                if (id != NullAdapter.NULL_ADAPTER_ID && id != LoadingAdapter.LOADING_ADAPTER_ID) {
+                    startActivity(new Intent(CourseInfoActivity.this, SchoolWorkInfoActivity.class));
+                }
             }
         });
 
@@ -96,27 +99,25 @@ public class CourseInfoActivity extends BaseActivity {
 
         lvSchoolWork.setAdapter(new LoadingAdapter(this));
 
-        String date = "";
-        try {
-            date = URLEncoder.encode("2000-01-01 12:00", "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String url = C.getSchoolWorkUrl(teacherCourse.getTeacherCourseId(), date);
+        String url = C.getSchoolWorkUrl(teacherCourse.getTeacherCourseId(), "2000-01-01 12:00");
         AndroidHttpHelper helper = new AndroidHttpHelper(this);
         helper.addRequestProperty("Cookie", P.getCookie());
         helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
             @Override
             public void onSucceed(HttpUtil.Result r) {
 
-                Type type = new TypeToken<Msg<SchoolWork>>() {
+                Type type = new TypeToken<Msg<List<SchoolWork>>>() {
                 }.getType();
                 Pair<Boolean, Object> pair = Util.handleMsg(CourseInfoActivity.this, r.result, type);
                 if (pair.first) {
-                    Object second = pair.second;
-                    M.t(CourseInfoActivity.this, second + "");
-                } else {
-                    lvSchoolWork.setAdapter(null);
+                    List<SchoolWork> schoolWorkList = (List<SchoolWork>) pair.second;
+                    if (schoolWorkList != null && schoolWorkList.size() > 0) {
+                        showSchoolWorkList(schoolWorkList);
+                    } else {
+                        lvSchoolWork.setAdapter(new NullAdapter(CourseInfoActivity.this, "暂无作业"));
+                    }
+                } else {//因为Util.handleMsg会在错误情况下进行提示，所以这里不用提示了
+                    lvSchoolWork.setAdapter(adapter);
                 }
 
             }
@@ -124,15 +125,37 @@ public class CourseInfoActivity extends BaseActivity {
         helper.setOnFailedListener(new AndroidHttpUtil.OnFailedListener() {
             @Override
             public void onFailed(HttpUtil.Result r) {
-                lvSchoolWork.setAdapter(null);
+                lvSchoolWork.setAdapter(adapter);
             }
         });
         helper.request(url);
 
     }
 
+    private void showSchoolWorkList(List<SchoolWork> schoolWorkList) {
+        SortHelper.sortMerge(schoolWorkList, new ISort<SchoolWork>() {
+            @Override
+            public int compare(SchoolWork schoolWork1, SchoolWork schoolWork2) {
+                long time1 = schoolWork1.getCreateDate().getTime();
+                long time2 = schoolWork2.getCreateDate().getTime();
+                return time1 <= time2 ? 1 : -1;
+            }
+        });
+        adapter = new SchoolWorkListAdapter(this, schoolWorkList);
+        lvSchoolWork.setAdapter(adapter);
+    }
+
     @OnClick(R.id.btn_add_school_work)
     public void onClick() {
-        TeacherAddSchoolWorkActivity.start(this, teacherCourse);
+        TeacherAddSchoolWorkActivity.start(this, teacherCourse, 3333, 44);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 3333 && resultCode == 44) {
+            startGetSchoolWork();
+        }
+    }
+
 }

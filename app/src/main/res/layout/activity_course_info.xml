@@ -13,103 +13,92 @@
         app:btnRightTextColor="@color/white"
         app:titleText="课程名称" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <!--
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/gold"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:paddingTop="10dp">
-            
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="课程学习提示"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
-            
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0.1px"
-                                android:layout_marginBottom="5dp"
-                                android:layout_marginTop="5dp"
-                                android:background="@color/black" />
-            
-                            <TextView
-                                android:id="@+id/tv_course_hint"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="课程学习提示"
-                                android:textSize="14sp" />
-            
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="30dp"
-                                android:text="章节名称"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
-            
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0.1px"
-                                android:layout_marginBottom="5dp"
-                                android:layout_marginTop="5dp"
-                                android:background="@color/black" />
-            
-                            <TextView
-                                android:id="@+id/tv_chapter_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="章节名称列表"
-                                android:textSize="14sp" />
-            
-                        </LinearLayout>
-            -->
-            <LinearLayout
-                android:id="@+id/btn_add_school_work"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_trans_gray_selector"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@android:drawable/ic_menu_add" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+    <!--
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="发布作业" />
+                    android:background="@color/gold"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="10dp">
+    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="课程学习提示"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+    
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1px"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/black" />
+    
+                    <TextView
+                        android:id="@+id/tv_course_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="课程学习提示"
+                        android:textSize="14sp" />
+    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="章节名称"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+    
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1px"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/black" />
+    
+                    <TextView
+                        android:id="@+id/tv_chapter_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="章节名称列表"
+                        android:textSize="14sp" />
+    
+                </LinearLayout>
+    -->
 
-            </LinearLayout>
+    <LinearLayout
+        android:id="@+id/btn_add_school_work"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_trans_gray_selector"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.1px"
-                android:background="@color/gray" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@android:drawable/ic_menu_add" />
 
-            <ListView
-                android:id="@+id/lv_school_work"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发布作业" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </ScrollView>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.1px"
+        android:background="@color/gray" />
+
+    <ListView
+        android:id="@+id/lv_school_work"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

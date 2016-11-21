@@ -23,7 +23,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
@@ -84,7 +83,7 @@ public class Util {
                                                       String content,
                                                       String finalDate,
                                                       String extraFilePath,
-                                                      String cookie) throws IOException {
+                                                      String cookie) throws Exception {
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(C.addSchoolWorkUrl());
@@ -93,9 +92,10 @@ public class Util {
             MultipartEntity requestEntity = new MultipartEntity();
             requestEntity.addPart("teacherCourse.teacherCourseId", new StringBody(teacherCourseId + ""));
             requestEntity.addPart("name", new StringBody(name));
-            if (!TextUtil.isEmpty(content)) {
-                requestEntity.addPart("content", new StringBody(content));
+            if (TextUtil.isEmpty(content)) {
+                content = "null";
             }
+            requestEntity.addPart("content", new StringBody(content));
             requestEntity.addPart("finalDate", new StringBody(finalDate));
             if (!TextUtil.isEmpty(extraFilePath)) {
                 requestEntity.addPart("extraFile", new FileBody(new File(extraFilePath)));
@@ -103,6 +103,7 @@ public class Util {
 
             httpPost.addHeader("Cookie", cookie);
             httpPost.setEntity(requestEntity);
+            //TODO 若文件大小在100k以上，报错：IllegalArgumentException: can't serialize to outbuffer
             HttpResponse response = httpClient.execute(httpPost);
 
             int statusCode = response.getStatusLine().getStatusCode();
