@@ -1,7 +1,6 @@
 package com.homework.main;
 
 import android.app.Application;
-import android.os.Environment;
 import android.os.Process;
 
 import com.homework.constant.C;
@@ -22,10 +21,8 @@ public class MyApplication extends Application {
         super.onCreate();
 
         P.context = getApplicationContext();
-        MyNotification.context = getApplicationContext();
-        C.dir = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + "homework" + File.separator;
         new File(C.dir).mkdirs();
+//        MyNotification.context = getApplicationContext();
 
         Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
             @Override

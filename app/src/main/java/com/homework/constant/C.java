@@ -1,5 +1,9 @@
 package com.homework.constant;
 
+import android.os.Environment;
+
+import java.io.File;
+
 /**
  * by 王荣俊 on 2016/10/5.
  */
@@ -8,7 +12,11 @@ public class C {
     //    public static final String hostUrl = "http://123.207.87.197:8080/homework";
     public static final String hostUrl = "http://coolgmr.com:8080/homework";
 
-    public static String dir;
+    public static String dir = Environment.getExternalStorageDirectory().getAbsolutePath() +
+            File.separator + "homework" + File.separator;
+
+    public static String extraFileDir = dir + "extraFiles" + File.separator;
+
 
     public static final int CODE_ILLEGAL = -1;//权限错误
     public static final int CODE_OK = 0;//成功

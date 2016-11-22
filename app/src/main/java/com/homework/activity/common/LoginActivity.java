@@ -31,7 +31,6 @@ import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.M;
 import com.wang.android_lib.util.WindowUtil;
 import com.wang.android_lib.view.BorderEditText;
-import com.wang.java_util.FileUtil;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
@@ -186,8 +185,6 @@ public class LoginActivity extends Activity {
                     //获取Cookie
                     String cookie = conn.getHeaderField("Set-Cookie");
                     P.setCookie(cookie);
-                    //TODO 待删
-                    FileUtil.write(cookie, C.dir + "cookie.txt");
 
                     return BitmapFactory.decodeStream(conn.getInputStream());
 

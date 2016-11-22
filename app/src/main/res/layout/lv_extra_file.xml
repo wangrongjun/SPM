@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <TextView
+        android:id="@+id/tv_file_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:maxLines="2"
+        android:text="附件名"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btn_download_or_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_trans_blue_selector"
+        android:text="下载/打开"
+        android:textColor="@color/blue_sky"
+        android:textSize="16sp" />
+
+</LinearLayout>
