@@ -32,10 +32,13 @@
 
         <activity android:name=".activity.TeacherMainActivity" />
         <activity android:name=".activity.TeacherAddSchoolWorkActivity" />
+        <activity android:name=".activity.StudentCommitSchoolWorkActivity" />
 
         <activity
             android:name=".activity.common.ShowCrashActivity"
             android:process=":show_crash" />
+
+        <service android:name=".service.DownloadExtraFileService" />
 
     </application>
 

@@ -41,7 +41,7 @@ public class StudentCourseFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_course, container, false);
         ButterKnife.bind(this, view);
         initView();
@@ -53,7 +53,7 @@ public class StudentCourseFragment extends Fragment {
         lvCourse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (id == NullAdapter.NULL_ADAPTER_ID && position == 0) {//如果是空适配器，即加载失败
+                if (id == NullAdapter.NULL_ADAPTER_ID) {//如果是空适配器，即加载失败
                     startGetCourseInfo();
                 } else if (id != LoadingAdapter.LOADING_ADAPTER_ID) {//若当前不是查询中，即已加载完成
                     TeacherCourse tc = (TeacherCourse) lvCourse.getAdapter().getItem(position);
@@ -76,19 +76,16 @@ public class StudentCourseFragment extends Fragment {
                 Pair<Boolean, Object> pair = Util.handleMsg(getActivity(), r.result, type);
                 if (pair.first) {
                     List<TeacherCourse> teacherCourseList = (List<TeacherCourse>) pair.second;
-                    //TODO
-//                    lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity(), teacherCourseList));
+                    lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity(), teacherCourseList));
                 } else {
-//                    lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
-                    lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity()));
+                    lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
                 }
             }
         });
         helper.setOnFailedListener(new AndroidHttpUtil.OnFailedListener() {
             @Override
             public void onFailed(HttpUtil.Result r) {
-//                TODO lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
-                lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity()));
+                lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
             }
         });
         helper.request(C.getStudentCourseInfoUrl(P.getStudent().getStudentId()));

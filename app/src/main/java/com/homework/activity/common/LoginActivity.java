@@ -80,7 +80,7 @@ public class LoginActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     etNumber.setText("3114006500");
-                    etPassword.setText("123456");
+                    etPassword.setText("111111");
                 } else {
                     etNumber.setText("teacher1");
                     etPassword.setText("123456");

@@ -9,11 +9,9 @@ import android.widget.TextView;
 
 import com.homework.R;
 import com.homework.bean.Course;
-import com.homework.bean.StudentClass;
 import com.homework.bean.Teacher;
 import com.homework.bean.TeacherCourse;
 import com.homework.bean.TeacherInformation;
-import com.wang.java_util.Pair;
 
 import java.util.List;
 
@@ -26,38 +24,12 @@ import butterknife.ButterKnife;
 public class TeacherCourseListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Pair<TeacherCourse, List<StudentClass>>> teacherCourseList;
+    private List<TeacherCourse> teacherCourseList;
 
     public TeacherCourseListAdapter(
-            Context context, List<Pair<TeacherCourse, List<StudentClass>>> teacherCourseList) {
+            Context context, List<TeacherCourse> teacherCourseList) {
         this.context = context;
         this.teacherCourseList = teacherCourseList;
-    }
-
-    //TODO delete
-    public TeacherCourseListAdapter(Context context) {/*
-        this.context = context;
-        teacherCourseList = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
-            Teacher teacher = new Teacher();
-            teacher.setTeacherId(i);
-            teacher.setAccount("311400_" + i);
-            TeacherInformation info = new TeacherInformation();
-            info.setAge(i + 5);
-            info.setGender(i % 2 == 0 ? "男" : "女");
-            info.setRealName("realName_" + i);
-            teacher.setTeacherInformation(info);
-            teacher.setRole(C.ROLE_STUDENT);
-
-            Course course = new Course("courseName_" + i);
-
-            TeacherCourse teacherCourse = new TeacherCourse();
-            teacherCourse.setTeacherCourseId(i);
-            teacherCourse.setCourse(course);
-            teacherCourse.setTeacher(teacher);
-
-            teacherCourseList.add(teacherCourse);
-        }*/
     }
 
     @Override
@@ -90,7 +62,7 @@ public class TeacherCourseListAdapter extends BaseAdapter {
     }
 
     private void updateView(ViewHolder holder, int position) {
-        TeacherCourse teacherCourse = teacherCourseList.get(position).first;
+        TeacherCourse teacherCourse = teacherCourseList.get(position);
         Course course = teacherCourse.getCourse();
         Teacher teacher = teacherCourse.getTeacher();
         if (course != null) {

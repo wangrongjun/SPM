@@ -24,17 +24,19 @@ import com.homework.util.Util;
 import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.IntentUtil;
 import com.wang.android_lib.util.M;
+import com.wang.android_lib.util.PathUtil;
 import com.wang.android_lib.view.BorderEditText;
 import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
 
 import org.apache.http.HttpStatus;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,7 +60,7 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
     @Bind(R.id.tv_teacher_course_name)
     TextView tvTeacherCourseName;
 
-    private String filePath;
+    private List<String> filePathList;
 
     private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
@@ -90,6 +92,8 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
      * 初始化teacherCourse和calendar
      */
     private void initData() {
+        filePathList = new ArrayList<>();
+
         String teacherCourseJson = getIntent().getStringExtra("teacherCourse");
         teacherCourse = new Gson().fromJson(teacherCourseJson, TeacherCourse.class);
         if (teacherCourse == null) {
@@ -183,7 +187,7 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
                             content,
                             sdfDate.format(new Date(calendar.getTimeInMillis())) + " " +
                                     sdfTime.format(new Date(calendar.getTimeInMillis())),
-                            filePath,
+                            filePathList,
                             P.getCookie()
                     );
                 } catch (Exception e) {
@@ -234,8 +238,12 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
         Uri uri = data.getData();
         if (uri == null) return;
 
-        filePath = uri.getPath();
-        tvFilePathList.setText(filePath);
+        filePathList.add(PathUtil.getRealFilePath(this, uri));
+        String s = "";
+        for (String path : filePathList) {
+            s += path + "\n";
+        }
+        tvFilePathList.setText(s);
     }
 
 }

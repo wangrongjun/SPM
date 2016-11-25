@@ -29,6 +29,10 @@ public class SchoolWorkListAdapter extends BaseAdapter {
         this.schoolWorkList = schoolWorkList;
     }
 
+    public List<SchoolWork> getSchoolWorkList() {
+        return schoolWorkList;
+    }
+
     @Override
     public int getCount() {
         return schoolWorkList.size();

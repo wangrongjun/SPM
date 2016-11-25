@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -45,6 +46,8 @@ public class CourseInfoActivity extends BaseActivity {
     ToolBarView toolBar;
     @Bind(R.id.lv_school_work)
     ListView lvSchoolWork;
+    @Bind(R.id.btn_add_school_work)
+    LinearLayout btnAddSchoolWork;
 
     private TeacherCourse teacherCourse;
 
@@ -72,6 +75,11 @@ public class CourseInfoActivity extends BaseActivity {
     }
 
     private void initView() {
+
+        if (P.getRole() == C.ROLE_STUDENT) {
+            btnAddSchoolWork.setVisibility(View.GONE);
+        }
+
         toolBar.setOnBtnRightTextClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,14 +91,15 @@ public class CourseInfoActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id != NullAdapter.NULL_ADAPTER_ID && id != LoadingAdapter.LOADING_ADAPTER_ID) {
-                    startActivity(new Intent(CourseInfoActivity.this, SchoolWorkInfoActivity.class));
+                    SchoolWork schoolWork = adapter.getSchoolWorkList().get(position);
+                    SchoolWorkInfoActivity.start(CourseInfoActivity.this, schoolWork);
                 }
             }
         });
 
         Course course = teacherCourse.getCourse();
         if (course != null) {
-            toolBar.setTitleText(course.getCourseName());
+            toolBar.setTitleText(course.getCourseName() + " 所有作业");
         }
 
     }

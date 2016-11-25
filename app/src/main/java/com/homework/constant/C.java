@@ -15,8 +15,8 @@ public class C {
     public static String dir = Environment.getExternalStorageDirectory().getAbsolutePath() +
             File.separator + "homework" + File.separator;
 
+    public static String cacheDir = dir + ".cache" + File.separator;
     public static String extraFileDir = dir + "extraFiles" + File.separator;
-
 
     public static final int CODE_ILLEGAL = -1;//权限错误
     public static final int CODE_OK = 0;//成功
@@ -73,8 +73,15 @@ public class C {
     /**
      * 教师发布课程作业
      */
-    public static String addSchoolWorkUrl() {
+    public static String teacherAddSchoolWorkUrl() {
         return hostUrl + "/schoolWork";
+    }
+
+    /**
+     * 学生提交（修改）作业
+     */
+    public static String studentCommitSchoolWorkUrl() {
+        return hostUrl + "/commitWork";
     }
 
 }

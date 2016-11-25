@@ -19,11 +19,10 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/btn_download_or_open"
+        android:id="@+id/tv_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_trans_blue_selector"
-        android:text="下载/打开"
+        android:text="下载/打开/下载中/重新下载"
         android:textColor="@color/blue_sky"
         android:textSize="16sp" />
 

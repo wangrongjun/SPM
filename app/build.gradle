@@ -37,6 +37,7 @@ dependencies {
 
 //    https://github.com/Jude95/SwipeBackHelper
     compile 'com.jude:swipebackhelper:3.1.2'
+//    compile 'org.wlf:FileDownloader:0.3.1'
 
 //    compile project(':ExtraLib:material_dialog')
 //    compile project(':ExtraLib:image_cache')

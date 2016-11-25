@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.homework.bean.Student;
 import com.homework.bean.Teacher;
+import com.homework.constant.C;
 import com.wang.android_lib.util.PrefUtil;
 
 /**
@@ -60,6 +61,10 @@ public class P extends PrefUtil {
             teacher = new Teacher();
         }
         setEntity(context, prefName, teacher);
+    }
+
+    public static int getRole() {
+        return getTeacher().getAccount() == null ? C.ROLE_STUDENT : C.ROLE_TEACHER;
     }
 
 }

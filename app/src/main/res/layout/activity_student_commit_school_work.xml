@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.homework.view.ToolBarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="提交作业" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_school_work_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:maxLines="3"
+            android:text="作业题目"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.wang.android_lib.view.BorderEditText
+            android:id="@+id/et_remark"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            app:borderColor="@color/gray"
+            app:borderWidth="1px"
+            app:clearBtnIcon="@mipmap/btn_clear"
+            app:hint="备注"
+            app:leftIcon="@mipmap/ic_launcher"
+            app:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_add_school_work_file"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/btn_blue_selector"
+            android:text="添加作业附件"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_file_path_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_commit_school_work"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/btn_orange_selector"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
