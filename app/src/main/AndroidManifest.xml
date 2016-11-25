@@ -28,11 +28,13 @@
         <activity android:name=".activity.StudentInfoActivity" />
         <activity android:name=".activity.CourseInfoActivity" />
         <activity android:name=".activity.CourseDataFileListActivity" />
-        <activity android:name=".activity.SchoolWorkInfoActivity" />
+        <activity android:name=".activity.StudentSchoolWorkInfoActivity" />
 
         <activity android:name=".activity.TeacherMainActivity" />
         <activity android:name=".activity.TeacherAddSchoolWorkActivity" />
         <activity android:name=".activity.StudentCommitSchoolWorkActivity" />
+        <activity android:name=".activity.TeacherSchoolWorkInfoActivity" />
+        <activity android:name=".activity.TeacherCheckCommitSchoolWorkActivity" />
 
         <activity
             android:name=".activity.common.ShowCrashActivity"

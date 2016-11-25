@@ -1,4 +1,4 @@
-package com.homework.activity;
+package com.homework.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -8,22 +8,23 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.homework.R;
-import com.homework.activity.common.BaseActivity;
 import com.homework.adapter.ExtraFileListAdapter;
 import com.homework.bean.ExtraFile;
 import com.homework.bean.SchoolWork;
 import com.homework.constant.C;
 import com.homework.service.DownloadExtraFileService;
-import com.homework.util.P;
 import com.homework.util.Util;
-import com.homework.view.ToolBarView;
 import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.util.IntentOpenFileUtil;
 import com.wang.android_lib.util.M;
@@ -40,9 +41,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * by wangrongjun on 2016/11/4.
+ * by wangrongjun on 2016/11/26.
  */
-public class SchoolWorkInfoActivity extends BaseActivity {
+public class SchoolWorkInfoFragment extends Fragment {
 
     @Bind(R.id.tv_school_work_name)
     TextView tvSchoolWorkName;
@@ -52,51 +53,46 @@ public class SchoolWorkInfoActivity extends BaseActivity {
     TextView tvSchoolWorkContent;
     @Bind(R.id.lv_extra_file)
     ListView lvExtraFile;
-    @Bind(R.id.tool_bar)
-    ToolBarView toolBar;
+
+    public static final String ACTION_UPDATE_DOWNLOAD_STATE = "com.homework.update_download_state";
 
     private SchoolWork schoolWork;
     private ExtraFileListAdapter adapter;
     private ServiceConnection serviceConnection;
     private DownloadExtraFileService.MyBinder myBinder;
 
-    public static final String ACTION_UPDATE_DOWNLOAD_STATE = "com.homework.update_download_state";
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_school_work_info);
-        ButterKnife.bind(this);
-
-        String json = getIntent().getStringExtra("schoolWork");
-        schoolWork = new Gson().fromJson(json, SchoolWork.class);
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_school_work_info, container, false);
+        ButterKnife.bind(this, view);
+        initData();
+        initReceiver();
         initView();
         initService();
-        initReceiver();
+        return view;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 345 && resultCode == 678) {
-            
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+        getActivity().unregisterReceiver(receiver);
+        getActivity().unbindService(serviceConnection);
+        getActivity().stopService(new Intent(getActivity(), DownloadExtraFileService.class));
+    }
+
+    private void initData() {
+        String json = getActivity().getIntent().getStringExtra("schoolWork");
+        schoolWork = new Gson().fromJson(json, SchoolWork.class);
+    }
+
+    private void initReceiver() {
+        IntentFilter filter = new IntentFilter(ACTION_UPDATE_DOWNLOAD_STATE);
+        getActivity().registerReceiver(receiver, filter);
     }
 
     private void initView() {
-
-        if (P.getRole() == C.ROLE_STUDENT) {
-            toolBar.setOnBtnRightTextClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    StudentCommitSchoolWorkActivity.start(SchoolWorkInfoActivity.this, schoolWork,
-                            345, 678);
-                }
-            });
-        } else {
-            toolBar.getRightBtnTextView().setVisibility(View.GONE);
-        }
 
         lvExtraFile.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -144,12 +140,12 @@ public class SchoolWorkInfoActivity extends BaseActivity {
         if (extraFileList.size() > 0) {
             showExtraFileList(extraFileList);
         } else {
-            lvExtraFile.setAdapter(new NullAdapter(this, "暂无附件"));
+            lvExtraFile.setAdapter(new NullAdapter(getActivity(), "暂无附件"));
         }
     }
 
     private void initService() {
-        Intent intent = new Intent(this, DownloadExtraFileService.class);
+        Intent intent = new Intent(getActivity(), DownloadExtraFileService.class);
         serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -161,49 +157,8 @@ public class SchoolWorkInfoActivity extends BaseActivity {
 
             }
         };
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
-
+        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
-
-    private void initReceiver() {
-        IntentFilter filter = new IntentFilter(ACTION_UPDATE_DOWNLOAD_STATE);
-        registerReceiver(receiver, filter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(receiver);
-        unbindService(serviceConnection);
-        stopService(new Intent(this, DownloadExtraFileService.class));
-    }
-
-    public static void start(Context context, SchoolWork schoolWork) {
-        Intent intent = new Intent(context, SchoolWorkInfoActivity.class);
-        intent.putExtra("schoolWork", new Gson().toJson(schoolWork));
-        context.startActivity(intent);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case ACTION_UPDATE_DOWNLOAD_STATE:
-                    int state = intent.getIntExtra("state", DownloadExtraFileService.STATE_FAILED);
-                    String fileUrl = intent.getStringExtra("fileUrl");
-                    String fileName = intent.getStringExtra("fileName");
-                    String filePath = intent.getStringExtra("filePath");
-                    if (state == DownloadExtraFileService.STATE_SUCCEED) {
-                        M.t(SchoolWorkInfoActivity.this, "文件" + fileName + "下载成功");
-                        updateDownloadButton(fileUrl, ExtraFileListAdapter.State.already_download);
-                    } else if (state == DownloadExtraFileService.STATE_FAILED) {
-                        String e = intent.getStringExtra("exception");
-                        M.t(SchoolWorkInfoActivity.this, "文件" + fileName + "下载失败，" + e);
-                    }
-                    break;
-            }
-        }
-    };
 
     private void updateDownloadButton(String fileUrl, ExtraFileListAdapter.State state) {
         List<Pair<ExtraFile, ExtraFileListAdapter.State>> extraFileStateList =
@@ -228,8 +183,29 @@ public class SchoolWorkInfoActivity extends BaseActivity {
                         new Pair<>(extraFile, ExtraFileListAdapter.State.not_exists));
             }
         }
-        adapter = new ExtraFileListAdapter(this, extraFileStateList);
+        adapter = new ExtraFileListAdapter(getActivity(), extraFileStateList);
         lvExtraFile.setAdapter(adapter);
     }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case ACTION_UPDATE_DOWNLOAD_STATE:
+                    int state = intent.getIntExtra("state", DownloadExtraFileService.STATE_FAILED);
+                    String fileUrl = intent.getStringExtra("fileUrl");
+                    String fileName = intent.getStringExtra("fileName");
+                    String filePath = intent.getStringExtra("filePath");
+                    if (state == DownloadExtraFileService.STATE_SUCCEED) {
+                        M.t(getActivity(), "文件" + fileName + "下载成功");
+                        updateDownloadButton(fileUrl, ExtraFileListAdapter.State.already_download);
+                    } else if (state == DownloadExtraFileService.STATE_FAILED) {
+                        String e = intent.getStringExtra("exception");
+                        M.t(getActivity(), "文件" + fileName + "下载失败，" + e);
+                    }
+                    break;
+            }
+        }
+    };
 
 }

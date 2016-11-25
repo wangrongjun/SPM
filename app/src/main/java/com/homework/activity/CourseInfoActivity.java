@@ -92,7 +92,11 @@ public class CourseInfoActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id != NullAdapter.NULL_ADAPTER_ID && id != LoadingAdapter.LOADING_ADAPTER_ID) {
                     SchoolWork schoolWork = adapter.getSchoolWorkList().get(position);
-                    SchoolWorkInfoActivity.start(CourseInfoActivity.this, schoolWork);
+                    if (P.getRole() == C.ROLE_STUDENT) {
+                        StudentSchoolWorkInfoActivity.start(CourseInfoActivity.this, schoolWork);
+                    } else {
+                        TeacherSchoolWorkInfoActivity.start(CourseInfoActivity.this, schoolWork);
+                    }
                 }
             }
         });

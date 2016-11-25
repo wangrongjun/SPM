@@ -6,7 +6,6 @@ import android.os.Process;
 import com.homework.constant.C;
 import com.homework.util.MyNotification;
 import com.homework.util.P;
-import com.wang.java_util.DebugUtil;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -25,7 +24,6 @@ public class MyApplication extends Application {
         new File(C.dir).mkdirs();
         new File(C.cacheDir).mkdirs();
         new File(C.extraFileDir).mkdirs();
-        DebugUtil.println("mkdir finish");
 //        initDownload();
 
 //        MyNotification.context = getApplicationContext();

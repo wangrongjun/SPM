@@ -84,4 +84,20 @@ public class C {
         return hostUrl + "/commitWork";
     }
 
+    /**
+     * 获取某学生某次作业下的作业:/commitWork/{schoolWorkId}
+     * 返回值：CommitSchoolWork转成的json
+     */
+    public static String studentGetCommitSchoolWorkUrl(int schoolWorkId) {
+        return hostUrl + "/commitWork/" + schoolWorkId;
+    }
+
+    /**
+     * 获取某老师某次作业下的所有提交的作业
+     * 返回值  List<CommitSchoolWork>转成的json(此次作业的全部已提交的作业)
+     */
+    public static String teacherGetCommitSchoolWorkUrl(int schoolWorkId) {
+        return hostUrl + "/commitWorks/" + schoolWorkId;
+    }
+
 }

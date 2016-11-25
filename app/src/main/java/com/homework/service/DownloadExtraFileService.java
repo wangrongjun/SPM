@@ -6,12 +6,11 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.homework.activity.SchoolWorkInfoActivity;
 import com.homework.bean.ExtraFile;
 import com.homework.constant.C;
+import com.homework.fragment.SchoolWorkInfoFragment;
 import com.homework.util.P;
 import com.homework.util.Util;
-import com.wang.java_util.DebugUtil;
 import com.wang.java_util.FileUtil;
 
 import java.util.ArrayList;
@@ -31,21 +30,9 @@ public class DownloadExtraFileService extends Service {
     private boolean isServiceAlive = true;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        DebugUtil.println("onCreate");
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         isServiceAlive = false;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        DebugUtil.println("onStartCommand");
-        return super.onStartCommand(intent, flags, startId);
     }
 
     @Nullable
@@ -82,7 +69,7 @@ public class DownloadExtraFileService extends Service {
                         FileUtil.delete(filePath);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Intent intent = new Intent(SchoolWorkInfoActivity.ACTION_UPDATE_DOWNLOAD_STATE);
+                        Intent intent = new Intent(SchoolWorkInfoFragment.ACTION_UPDATE_DOWNLOAD_STATE);
                         intent.putExtra("state", STATE_FAILED);
                         intent.putExtra("fileUrl", extraFile.getFileUrl());
                         intent.putExtra("fileName", extraFile.getFileName());
@@ -91,7 +78,7 @@ public class DownloadExtraFileService extends Service {
                         sendBroadcast(intent);
                         continue;
                     }
-                    Intent intent = new Intent(SchoolWorkInfoActivity.ACTION_UPDATE_DOWNLOAD_STATE);
+                    Intent intent = new Intent(SchoolWorkInfoFragment.ACTION_UPDATE_DOWNLOAD_STATE);
                     intent.putExtra("state", STATE_SUCCEED);
                     intent.putExtra("fileUrl", extraFile.getFileUrl());
                     intent.putExtra("fileName", extraFile.getFileName());
