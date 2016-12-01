@@ -24,8 +24,10 @@ public class TeacherCheckCommitSchoolWorkActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initData();
-        startQueryCommitSchoolWork();
+
+        //TODO 当前进度
+//        initData();
+//        startQueryCommitSchoolWork();
     }
 
     private void initData() {
@@ -45,7 +47,7 @@ public class TeacherCheckCommitSchoolWorkActivity extends BaseActivity {
         helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
             @Override
             public void onSucceed(HttpUtil.Result r) {
-                
+
             }
         });
         helper.request(C.teacherGetCommitSchoolWorkUrl(schoolWork.getSchoolWorkId()));

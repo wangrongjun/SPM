@@ -157,12 +157,17 @@ public class ToolBarView extends RelativeLayout {
             btnRight.setText(btnRightText);
             btnRight.setTextColor(btnRightTextColor);
             btnRight.setGravity(Gravity.CENTER);
+            btnRight.setBackgroundResource(R.drawable.btn_trans_gray_selector);
+            btnRight.setPadding(
+                    DimensionUtil.dipToPx(context, 10),
+                    0,
+                    DimensionUtil.dipToPx(context, 10),
+                    0
+            );
 //            btnRight.setTextSize(btnRightTextSize);
             params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             params.addRule(ALIGN_PARENT_RIGHT, TRUE);
             params.addRule(CENTER_VERTICAL, TRUE);
-            params.rightMargin = DimensionUtil.dipToPx(context, 10);
-            params.leftMargin = DimensionUtil.dipToPx(context, 10);
             addView(btnRight, params);
         }
 

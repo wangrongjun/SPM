@@ -31,6 +31,7 @@ public class HttpUtil {
         HttpClient httpClient = new DefaultHttpClient();
         Pair<Integer, String> stateMessage;
 
+        //TODO delete
         String content = "schoolWorkId: " + schoolWorkId + "\nremark: " + remark +
                 "\nextraFiles:\n" + GsonUtil.formatJson(filePathList);
         NotificationUtil.showNotification(P.context, 12345, "studentCommit-request", content);
@@ -65,6 +66,7 @@ public class HttpUtil {
             httpClient.getConnectionManager().shutdown();
         }
 
+        //TODO delete
         content = GsonUtil.formatJson(stateMessage);
         NotificationUtil.showNotification(P.context, 123456, "studentCommit-response", content);
 

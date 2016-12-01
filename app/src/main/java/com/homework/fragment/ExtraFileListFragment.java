@@ -15,27 +15,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.adapter.ExtraFileListAdapter;
 import com.homework.bean.ExtraFile;
-import com.homework.bean.SchoolWork;
 import com.homework.constant.C;
 import com.homework.service.DownloadExtraFileService;
 import com.homework.util.Util;
 import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.util.IntentOpenFileUtil;
 import com.wang.android_lib.util.M;
+import com.wang.java_util.DebugUtil;
 import com.wang.java_util.Pair;
+import com.wang.java_util.TextUtil;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,20 +42,14 @@ import butterknife.ButterKnife;
 /**
  * by wangrongjun on 2016/11/26.
  */
-public class SchoolWorkInfoFragment extends Fragment {
+public class ExtraFileListFragment extends Fragment {
 
-    @Bind(R.id.tv_school_work_name)
-    TextView tvSchoolWorkName;
-    @Bind(R.id.tv_time)
-    TextView tvTime;
-    @Bind(R.id.tv_school_work_content)
-    TextView tvSchoolWorkContent;
     @Bind(R.id.lv_extra_file)
     ListView lvExtraFile;
 
     public static final String ACTION_UPDATE_DOWNLOAD_STATE = "com.homework.update_download_state";
 
-    private SchoolWork schoolWork;
+    private List<ExtraFile> extraFileList;
     private ExtraFileListAdapter adapter;
     private ServiceConnection serviceConnection;
     private DownloadExtraFileService.MyBinder myBinder;
@@ -64,6 +57,7 @@ public class SchoolWorkInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        DebugUtil.println("onCreateView");
         View view = inflater.inflate(R.layout.fragment_school_work_info, container, false);
         ButterKnife.bind(this, view);
         initData();
@@ -83,8 +77,13 @@ public class SchoolWorkInfoFragment extends Fragment {
     }
 
     private void initData() {
-        String json = getActivity().getIntent().getStringExtra("schoolWork");
-        schoolWork = new Gson().fromJson(json, SchoolWork.class);
+        String json = getActivity().getIntent().getStringExtra("extraFileList");
+        DebugUtil.println(json);
+        if (!TextUtil.isEmpty(json)) {
+            Type type = new TypeToken<List<ExtraFile>>() {
+            }.getType();
+            extraFileList = new Gson().fromJson(json, type);
+        }
     }
 
     private void initReceiver() {
@@ -124,24 +123,12 @@ public class SchoolWorkInfoFragment extends Fragment {
             }
         });
 
-        tvSchoolWorkName.setText(schoolWork.getName());
-        tvSchoolWorkContent.setText(schoolWork.getContent());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String s1 = sdf.format(schoolWork.getCreateDate());
-        String s2 = sdf.format(schoolWork.getFinalDate());
-        tvTime.setText(s1 + " 到 " + s2);
-
-        List<ExtraFile> extraFileList = new ArrayList<>();
-        Set<ExtraFile> extraFiles = schoolWork.getExtraFiles();
-        Iterator<ExtraFile> iterator = extraFiles.iterator();
-        while (iterator.hasNext()) {
-            extraFileList.add(iterator.next());
-        }
-        if (extraFileList.size() > 0) {
+        if (extraFileList != null && extraFileList.size() > 0) {
             showExtraFileList(extraFileList);
         } else {
             lvExtraFile.setAdapter(new NullAdapter(getActivity(), "暂无附件"));
         }
+
     }
 
     private void initService() {

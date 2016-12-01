@@ -15,8 +15,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -45,22 +44,24 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:maxLines="5"
-            android:text="作业题目"
+            android:maxLines="3"
+            android:text="作业备注"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="已提交的作业附件："
             android:textSize="14sp" />
 
-        <ListView
-            android:id="@+id/lv_extra_file"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment_extra_file"
+        android:name="com.homework.fragment.ExtraFileListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

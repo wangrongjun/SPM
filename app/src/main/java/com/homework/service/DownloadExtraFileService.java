@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.homework.bean.ExtraFile;
 import com.homework.constant.C;
-import com.homework.fragment.SchoolWorkInfoFragment;
+import com.homework.fragment.ExtraFileListFragment;
 import com.homework.util.P;
 import com.homework.util.Util;
 import com.wang.java_util.FileUtil;
@@ -69,7 +69,7 @@ public class DownloadExtraFileService extends Service {
                         FileUtil.delete(filePath);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Intent intent = new Intent(SchoolWorkInfoFragment.ACTION_UPDATE_DOWNLOAD_STATE);
+                        Intent intent = new Intent(ExtraFileListFragment.ACTION_UPDATE_DOWNLOAD_STATE);
                         intent.putExtra("state", STATE_FAILED);
                         intent.putExtra("fileUrl", extraFile.getFileUrl());
                         intent.putExtra("fileName", extraFile.getFileName());
@@ -78,7 +78,7 @@ public class DownloadExtraFileService extends Service {
                         sendBroadcast(intent);
                         continue;
                     }
-                    Intent intent = new Intent(SchoolWorkInfoFragment.ACTION_UPDATE_DOWNLOAD_STATE);
+                    Intent intent = new Intent(ExtraFileListFragment.ACTION_UPDATE_DOWNLOAD_STATE);
                     intent.putExtra("state", STATE_SUCCEED);
                     intent.putExtra("fileUrl", extraFile.getFileUrl());
                     intent.putExtra("fileName", extraFile.getFileName());
