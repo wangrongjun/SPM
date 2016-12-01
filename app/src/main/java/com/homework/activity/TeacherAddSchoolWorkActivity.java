@@ -19,6 +19,7 @@ import com.homework.R;
 import com.homework.activity.common.BaseActivity;
 import com.homework.bean.Msg;
 import com.homework.bean.TeacherCourse;
+import com.homework.util.HttpUtil;
 import com.homework.util.P;
 import com.homework.util.Util;
 import com.wang.android_lib.util.DialogUtil;
@@ -181,7 +182,7 @@ public class TeacherAddSchoolWorkActivity extends BaseActivity {
             @Override
             protected Pair<Integer, String> doInBackground(Void... params) {
                 try {
-                    return Util.addSchoolWork(
+                    return HttpUtil.addSchoolWork(
                             teacherCourse.getTeacherCourseId(),
                             name,
                             content,

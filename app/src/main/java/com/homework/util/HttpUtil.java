@@ -1,6 +1,8 @@
 package com.homework.util;
 
 import com.homework.constant.C;
+import com.wang.android_lib.util.NotificationUtil;
+import com.wang.java_util.GsonUtil;
 import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
 
@@ -28,6 +30,10 @@ public class HttpUtil {
                                                                 List<String> filePathList) {
         HttpClient httpClient = new DefaultHttpClient();
         Pair<Integer, String> stateMessage;
+
+        String content = "schoolWorkId: " + schoolWorkId + "\nremark: " + remark +
+                "\nextraFiles:\n" + GsonUtil.formatJson(filePathList);
+        NotificationUtil.showNotification(P.context, 12345, "studentCommit-request", content);
 
         try {
             MultipartEntity multipartEntity = new MultipartEntity();
@@ -59,7 +65,59 @@ public class HttpUtil {
             httpClient.getConnectionManager().shutdown();
         }
 
+        content = GsonUtil.formatJson(stateMessage);
+        NotificationUtil.showNotification(P.context, 123456, "studentCommit-response", content);
+
         return stateMessage;
+    }
+
+    /**
+     * 教师发布课程作业
+     * http://blog.csdn.net/Just_szl/article/details/7659347
+     *
+     * @return HttpStatus类的状态码 + 服务器返回的结果字符串
+     */
+    public static Pair<Integer, String> addSchoolWork(int teacherCourseId,
+                                                      String name,
+                                                      String content,
+                                                      String finalDate,
+                                                      List<String> extraFilePath,
+                                                      String cookie) throws Exception {
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(C.teacherAddSchoolWorkUrl());
+
+        try {
+            MultipartEntity requestEntity = new MultipartEntity();
+            requestEntity.addPart("teacherCourse.teacherCourseId", new StringBody(teacherCourseId + ""));
+            requestEntity.addPart("name", new StringBody(name));
+            if (TextUtil.isEmpty(content)) {
+                content = "null";
+            }
+            requestEntity.addPart("content", new StringBody(content));
+            requestEntity.addPart("finalDate", new StringBody(finalDate));
+            for (String filePath : extraFilePath) {
+                if (!TextUtil.isEmpty(filePath)) {
+                    requestEntity.addPart("extraFile", new FileBody(new File(filePath)));
+                }
+            }
+
+            httpPost.addHeader("Cookie", cookie);
+            httpPost.setEntity(requestEntity);
+            HttpResponse response = httpClient.execute(httpPost);
+
+            int statusCode = response.getStatusLine().getStatusCode();
+            HttpEntity responseEntity = response.getEntity();
+            String result = EntityUtils.toString(responseEntity);//httpclient的工具类读取返回数据
+
+            return new Pair<>(statusCode, result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            httpClient.getConnectionManager().shutdown();
+            throw e;
+        }
+
     }
 
 }

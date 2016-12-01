@@ -27,8 +27,8 @@ import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
-import com.wang.test.ISort;
-import com.wang.test.SortHelper;
+import com.wang.math.sort.ISort;
+import com.wang.math.sort.SortHelper;
 
 import java.lang.reflect.Type;
 import java.util.List;

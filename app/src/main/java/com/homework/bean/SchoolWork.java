@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class SchoolWork {//教师发布的
 
-    private int SchoolWorkId;
+    private int schoolWorkId;
     private String name;// 作业名
     private String content;// 内容
     private Date finalDate;// 截止日期
@@ -21,11 +21,11 @@ public class SchoolWork {//教师发布的
     private int commitWorkCount = 0;// 提交的数量
 
     public int getSchoolWorkId() {
-        return SchoolWorkId;
+        return schoolWorkId;
     }
 
     public void setSchoolWorkId(int schoolWorkId) {
-        SchoolWorkId = schoolWorkId;
+        this.schoolWorkId = schoolWorkId;
     }
 
     public String getName() {

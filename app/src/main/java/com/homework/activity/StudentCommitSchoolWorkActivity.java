@@ -1,6 +1,7 @@
 package com.homework.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,10 +10,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.common.BaseActivity;
+import com.homework.bean.Msg;
 import com.homework.bean.SchoolWork;
 import com.homework.util.HttpUtil;
+import com.homework.util.Util;
 import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.IntentUtil;
 import com.wang.android_lib.util.M;
@@ -22,6 +26,7 @@ import com.wang.java_util.Pair;
 
 import org.apache.http.HttpStatus;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +68,7 @@ public class StudentCommitSchoolWorkActivity extends BaseActivity {
 
     private void initView() {
         tvSchoolWorkName.setText("作业题目：" + schoolWork.getName());
+        updateTvFilePathList();
     }
 
     public static void start(Activity activity, SchoolWork schoolWork,
@@ -91,6 +97,8 @@ public class StudentCommitSchoolWorkActivity extends BaseActivity {
         }
     }
 
+    private Context context = this;
+
     private void startCommitSchoolWork(final int schoolWorkId,
                                        final String remark,
                                        final List<String> filePathList) {
@@ -107,11 +115,19 @@ public class StudentCommitSchoolWorkActivity extends BaseActivity {
             protected void onPostExecute(Pair<Integer, String> stateResult) {
                 DialogUtil.cancelProgressDialog();
                 if (stateResult.first == HttpStatus.SC_OK) {
-                    M.t(StudentCommitSchoolWorkActivity.this, "提交成功");
-                    setResult(resultCode);
-                    finish();
+                    Type type = new TypeToken<Msg<String>>() {
+                    }.getType();
+                    Pair<Boolean, Object> msg = Util.handleMsg(context, stateResult.second, type);
+                    if (msg.first) {
+                        M.t(context, msg.second + "");
+                        setResult(resultCode);
+                        finish();
+                    } else {
+                        M.t(context, msg.second + "");
+                    }
+
                 } else {
-                    M.t(StudentCommitSchoolWorkActivity.this, "提交失败，" + stateResult.second);
+                    M.t(context, "提交失败，" + stateResult.second);
                 }
             }
         }.execute();
@@ -127,6 +143,10 @@ public class StudentCommitSchoolWorkActivity extends BaseActivity {
         if (uri == null) return;
 
         filePathList.add(PathUtil.getRealFilePath(this, uri));
+        updateTvFilePathList();
+    }
+
+    private void updateTvFilePathList() {
         String s = "";
         for (String path : filePathList) {
             s += path + "\n";

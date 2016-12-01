@@ -19,6 +19,7 @@ import com.homework.util.Util;
 import com.homework.view.ToolBarView;
 import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
+import com.wang.android_lib.util.DialogUtil;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 
@@ -38,6 +39,7 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
     TextView tvState;
 
     private SchoolWork schoolWork;
+    private CommitSchoolWork commitSchoolWork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,6 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initData();
-        initToolBar();
         startQueryCommitState();
     }
 
@@ -55,32 +56,22 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
         schoolWork = new Gson().fromJson(json, SchoolWork.class);
     }
 
-    private void initToolBar() {
-
-        toolBar.setOnBtnRightTextClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StudentCommitSchoolWorkActivity.start(StudentSchoolWorkInfoActivity.this, schoolWork,
-                        345, 678);
-            }
-        });
-
-    }
-
     private void startQueryCommitState() {
-        tvState.setText("正在获取作业提交状态...");
+        DialogUtil.showProgressDialog(this, "正在获取状态");
         AndroidHttpHelper helper = new AndroidHttpHelper(this);
         helper.addRequestProperty("Cookie", P.getCookie());
         helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
             @Override
             public void onSucceed(HttpUtil.Result r) {
+                toolBar.getRightBtnTextView().setVisibility(View.VISIBLE);
                 handleResult(r.result);
             }
         });
         helper.setOnFailedListener(new AndroidHttpUtil.OnFailedListener() {
             @Override
             public void onFailed(HttpUtil.Result r) {
-                tvState.setText("作业提交状态获取失败");
+                toolBar.getRightBtnTextView().setVisibility(View.GONE);
+                tvState.setText("提交状态获取失败");
             }
         });
         helper.request(C.studentGetCommitSchoolWorkUrl(schoolWork.getSchoolWorkId()));
@@ -91,10 +82,27 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
         }.getType();
         Pair<Boolean, Object> handleMsg = Util.handleMsg(this, result, type);
         if (handleMsg.first) {
-            CommitSchoolWork commitSchoolWork = (CommitSchoolWork) handleMsg.second;
-            tvState.setText("aaa");
+            commitSchoolWork = (CommitSchoolWork) handleMsg.second;
+            tvState.setText("已提交");
+            toolBar.getRightBtnTextView().setVisibility(View.VISIBLE);
+            toolBar.getRightBtnTextView().setText("查看");
+            toolBar.getRightBtnTextView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StudentCommitSchoolWorkActivity.start(StudentSchoolWorkInfoActivity.this, schoolWork,
+                            345, 678);
+                }
+            });
         } else {
-            tvState.setText("作业提交状态获取失败");
+            tvState.setText("未提交");
+            toolBar.getRightBtnTextView().setText("提交");
+            toolBar.getRightBtnTextView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StudentCommitSchoolWorkActivity.start(StudentSchoolWorkInfoActivity.this, schoolWork,
+                            345, 678);
+                }
+            });
         }
     }
 
