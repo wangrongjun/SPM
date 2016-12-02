@@ -34,8 +34,9 @@
         <activity android:name=".activity.TeacherAddSchoolWorkActivity" />
         <activity android:name=".activity.StudentCommitSchoolWorkActivity" />
         <activity android:name=".activity.TeacherSchoolWorkInfoActivity" />
-        <activity android:name=".activity.TeacherCheckCommitSchoolWorkActivity" />
+        <activity android:name=".activity.TeacherCheckCommitSchoolWorkListActivity" />
         <activity android:name=".activity.StudentCheckCommitSchoolWorkActivity" />
+        <activity android:name=".activity.TeacherCheckCommitSchoolWorkActivity" />
 
         <activity
             android:name=".activity.common.ShowCrashActivity"

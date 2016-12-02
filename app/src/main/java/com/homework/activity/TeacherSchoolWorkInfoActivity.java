@@ -82,7 +82,7 @@ public class TeacherSchoolWorkInfoActivity extends BaseActivity {
         toolBar.setOnBtnRightTextClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TeacherCheckCommitSchoolWorkActivity.start(
+                TeacherCheckCommitSchoolWorkListActivity.start(
                         TeacherSchoolWorkInfoActivity.this, schoolWork);
             }
         });

@@ -82,7 +82,7 @@ public class ToolBarView extends RelativeLayout {
         }
     }
 
-    private void initView() {
+    public void initView() {
 
 
 //        设置背景
