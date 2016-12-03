@@ -148,6 +148,13 @@ public class ExtraFileListFragment extends Fragment {
     }
 
     private void updateDownloadButton(String fileUrl, ExtraFileListAdapter.State state) {
+
+        if (adapter == null) {//设A，B页面都包含该Fragment,从A页面打开B页面（此时A页面被覆盖），
+            // 如果在B页面进行下载，下载会发出广播通知B更新，但同时A也收到广播，从而执行A的
+            // onReceive。但是此时A处于onStop状态，A的fragment的adapter为空，就会抛出空指针异常。
+            return;
+        }
+
         List<Pair<ExtraFile, ExtraFileListAdapter.State>> extraFileStateList =
                 adapter.getExtraFileStateList();
         for (Pair<ExtraFile, ExtraFileListAdapter.State> extraFileState : extraFileStateList) {
