@@ -69,6 +69,14 @@
         android:layout_marginTop="5dp"
         android:background="@color/gray" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/light_gray"
+        android:gravity="center"
+        android:text="作业附件（长按可删除）" />
+
     <fragment
         android:id="@+id/fragment_school_work_info"
         android:name="com.homework.fragment.ExtraFileListFragment"

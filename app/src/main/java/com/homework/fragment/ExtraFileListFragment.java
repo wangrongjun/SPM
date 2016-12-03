@@ -3,6 +3,7 @@ package com.homework.fragment;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -21,13 +22,19 @@ import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.adapter.ExtraFileListAdapter;
 import com.homework.bean.ExtraFile;
+import com.homework.bean.Msg;
 import com.homework.constant.C;
 import com.homework.service.DownloadExtraFileService;
+import com.homework.util.P;
 import com.homework.util.Util;
 import com.wang.android_lib.adapter.NullAdapter;
+import com.wang.android_lib.helper.AndroidHttpHelper;
+import com.wang.android_lib.util.AndroidHttpUtil;
+import com.wang.android_lib.util.DialogUtil;
 import com.wang.android_lib.util.IntentOpenFileUtil;
 import com.wang.android_lib.util.M;
 import com.wang.java_util.DebugUtil;
+import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
 
@@ -93,6 +100,12 @@ public class ExtraFileListFragment extends Fragment {
 
     private void initView() {
 
+        if (extraFileList != null && extraFileList.size() > 0) {
+            showExtraFileList(extraFileList);
+        } else {
+            lvExtraFile.setAdapter(new NullAdapter(getActivity(), "暂无附件"));
+        }
+
         lvExtraFile.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,12 +136,50 @@ public class ExtraFileListFragment extends Fragment {
             }
         });
 
-        if (extraFileList != null && extraFileList.size() > 0) {
-            showExtraFileList(extraFileList);
-        } else {
-            lvExtraFile.setAdapter(new NullAdapter(getActivity(), "暂无附件"));
-        }
+        lvExtraFile.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                if (id == NullAdapter.NULL_ADAPTER_ID) {
+                    return true;
+                }
+                if (adapter != null) {
+                    final ExtraFile extraFile = adapter.getExtraFileStateList().get(position).first;
+                    DialogUtil.showConfirmDialog(
+                            getActivity(),
+                            "提示",
+                            "是否删除作业附件" + extraFile.getFileName(),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startDeleteExtraFile(extraFile.getExtraFileId(), position);
+                                }
+                            });
+                }
+                return true;
+            }
+        });
 
+    }
+
+    private void startDeleteExtraFile(int extraFileId, final int position) {
+        AndroidHttpHelper helper = new AndroidHttpHelper(getActivity());
+        helper.addRequestProperty("Cookie", P.getCookie());
+        helper.setOutput(C.getTeacherDeleteExtraFileUrlOutput(extraFileId));
+        helper.setDialogHint("正在删除");
+        helper.setRequestMethod("POST");
+        helper.setOnSucceedListener(new AndroidHttpUtil.OnSucceedListener() {
+            @Override
+            public void onSucceed(HttpUtil.Result r) {
+                Type type = new TypeToken<Msg<String>>() {
+                }.getType();
+                Pair<Boolean, Object> msg = Util.handleMsg(getActivity(), r.result, type);
+                M.t(getActivity(), msg.second + "");
+                adapter.getExtraFileStateList().remove(position);
+                adapter.notifyDataSetChanged();
+                //TODO 当前进度，已完成删除功能，需要通知之前的页面同步更新
+            }
+        });
+        helper.request(C.teacherDeleteExtraFileUrl());
     }
 
     private void initService() {

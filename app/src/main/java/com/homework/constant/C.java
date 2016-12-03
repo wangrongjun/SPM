@@ -100,4 +100,27 @@ public class C {
         return hostUrl + "/commitWorks/" + schoolWorkId;
     }
 
+    /**
+     * 教师删除作业附件
+     * <p/>
+     * 请求方式:DELETE(非GET,POST，都一律用POST请求加参数_method="参数类型(如这里为DELETE)")
+     * 权限:教师
+     * 请求参数:{
+     * _method:DELETE(以后不再说明)
+     * extraFileId:删除的附件编号
+     * }
+     * 返回值{
+     * success
+     * }
+     * 失败{
+     * }
+     */
+    public static String teacherDeleteExtraFileUrl() {
+        return hostUrl + "/schoolWork/extraFile";
+    }
+
+    public static String getTeacherDeleteExtraFileUrlOutput(int extraFileId) {
+        return "_method=DELETE&extraFileId=" + extraFileId;
+    }
+
 }

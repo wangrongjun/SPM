@@ -54,8 +54,8 @@ public class TeacherSchoolWorkInfoActivity extends BaseActivity {
     }
 
     private void initView() {
-        tvSchoolWorkName.setText(schoolWork.getName());
-        tvSchoolWorkContent.setText(schoolWork.getContent());
+        tvSchoolWorkName.setText("作业题目：" + schoolWork.getName());
+        tvSchoolWorkContent.setText("作业内容：" + schoolWork.getContent());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String s1 = sdf.format(schoolWork.getCreateDate());
         String s2 = sdf.format(schoolWork.getFinalDate());
