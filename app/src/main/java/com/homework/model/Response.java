@@ -1,4 +1,4 @@
-package com.homework.model.api;
+package com.homework.model;
 
 import com.homework.constant.StateCode;
 
@@ -11,19 +11,20 @@ public class Response<T> {
     private String message;
     private T entity;
     private T entityList;
-    private int currentPage; // 当前页数
-    private int pageSize;    // 每页显示数量
-    private int maxCount;    // 总条数
-    private int maxPage;     // 总页数
+//    private int currentPage; // 当前页数
+//    private int pageSize;    // 每页显示数量
+//    private int maxCount;    // 总条数
+//    private int maxPage;     // 总页数
 
     public Response(StateCode stateCode, String message) {
         this.stateCode = stateCode;
         this.message = message;
     }
 
-    public Response(StateCode stateCode, T entity) {
+    public Response(StateCode stateCode, T entity, T entityList) {
         this.stateCode = stateCode;
         this.entity = entity;
+        this.entityList = entityList;
     }
 
     public StateCode getStateCode() {
@@ -42,19 +43,4 @@ public class Response<T> {
         return entityList;
     }
 
-    public int getCurrentPage() {
-        return currentPage;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public int getMaxCount() {
-        return maxCount;
-    }
-
-    public int getMaxPage() {
-        return maxPage;
-    }
 }

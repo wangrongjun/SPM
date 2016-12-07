@@ -184,9 +184,9 @@ public class LoginActivity extends Activity {
     }
 
     private void teacherLogin(final String account, final String password, final String verifyCode) {
-        dataModel.studentLogin(account, password, verifyCode, new CallBack<Student>() {
+        dataModel.teacherLogin(account, password, verifyCode, new CallBack<Teacher>() {
             @Override
-            public void onSucceed(Student data) {
+            public void onSucceed(Teacher data) {
                 startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
             }
 
