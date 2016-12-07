@@ -2,24 +2,28 @@ package com.homework.model;
 
 import android.os.AsyncTask;
 
-import com.homework.bean.TeacherCourse;
-import com.homework.model.api.HttpImpl;
-import com.homework.model.api.IHttp;
+import com.homework.bean.SchoolWork;
 import com.homework.bean.Student;
 import com.homework.bean.Teacher;
+import com.homework.bean.TeacherCourse;
 import com.homework.constant.StateCode;
+import com.homework.model.api.HttpImpl;
+import com.homework.model.api.IHttp;
 import com.homework.util.P;
 import com.wang.java_util.DebugUtil;
 import com.wang.java_util.TextUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * by wangrongjun on 2016/12/6.
  * 业务逻辑层。
- * 负责对输入数据进行边界检查，合法性检查，启动新线程异步访问后台，根据返回的状态码返回提示信息或数据。
+ * 负责对输入数据进行边界检查，合法性检查，启动新线程异步访问后台，根据后台接口层返回的状态码返回提示信息或数据。
  */
 public class DataModel {
+
+    public static final String INTERNET_UNABLE_HINT = "服务器连接失败";
 
     private IHttp iHttp;
 
@@ -33,6 +37,18 @@ public class DataModel {
 
     public String getCookie() {
         return P.getCookie();
+    }
+
+    public Student getStudent() {
+        return P.getStudent();
+    }
+
+    public Teacher getTeacher() {
+        return P.getTeacher();
+    }
+
+    public int getRole() {
+        return P.getRole();
     }
 
     public void studentLogin(final String account, final String password, final String verifyCode,
@@ -60,8 +76,8 @@ public class DataModel {
                         P.setStudent(student);
                         callBack.onSucceed(student);
                         break;
-                    case INTERNET_FAIL:
-                        callBack.onFailure(StateCode.INTERNET_FAIL, "服务器连接失败");
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
                         break;
                     default:
                         callBack.onFailure(response.getStateCode(), response.getMessage());
@@ -97,8 +113,8 @@ public class DataModel {
                         P.setTeacher(teacher);
                         callBack.onSucceed(teacher);
                         break;
-                    case INTERNET_FAIL:
-                        callBack.onFailure(StateCode.INTERNET_FAIL, "服务器连接失败");
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
                         break;
                     default:
                         callBack.onFailure(response.getStateCode(), response.getMessage());
@@ -114,7 +130,7 @@ public class DataModel {
         new AsyncTask<Void, Void, Response<List<TeacherCourse>>>() {
             @Override
             protected Response<List<TeacherCourse>> doInBackground(Void... params) {
-                return iHttp.studentGetCourseInfo(P.getStudent().getStudentId(), getCookie());
+                return iHttp.studentGetCourseInfo(getStudent().getStudentId(), getCookie());
             }
 
             @Override
@@ -126,8 +142,96 @@ public class DataModel {
                     case OK:
                         callBack.onSucceed(response.getEntityList());
                         break;
-                    case INTERNET_FAIL:
-                        callBack.onFailure(StateCode.INTERNET_FAIL, "服务器连接失败");
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
+                        break;
+                    default:
+                        callBack.onFailure(response.getStateCode(), response.getMessage());
+                        break;
+                }
+            }
+        }.execute();
+
+    }
+
+    public void studentGetClassmateList(final CallBack<List<Student>> callBack) {
+
+        new AsyncTask<Void, Void, Response<List<Student>>>() {
+            @Override
+            protected Response<List<Student>> doInBackground(Void... params) {
+                return iHttp.studentGetClassmateList(getStudent().getStudentId(), getCookie());
+            }
+
+            @Override
+            protected void onPostExecute(Response<List<Student>> response) {
+                //TODO delete
+                DebugUtil.printlnEntity(response);
+
+                switch (response.getStateCode()) {
+                    case OK:
+                        callBack.onSucceed(response.getEntityList());
+                        break;
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
+                        break;
+                    default:
+                        callBack.onFailure(response.getStateCode(), response.getMessage());
+                        break;
+                }
+            }
+        }.execute();
+
+    }
+
+    public void teacherGetCourseInfoList(final CallBack<Map<Integer, Object[]>> callBack) {
+
+        new AsyncTask<Void, Void, Response<Map<Integer, Object[]>>>() {
+            @Override
+            protected Response<Map<Integer, Object[]>> doInBackground(Void... params) {
+                return iHttp.teacherGetCourseInfoList(getTeacher().getTeacherId(), getCookie());
+            }
+
+            @Override
+            protected void onPostExecute(Response<Map<Integer, Object[]>> response) {
+                //TODO delete
+                DebugUtil.printlnEntity(response);
+
+                switch (response.getStateCode()) {
+                    case OK:
+                        callBack.onSucceed(response.getEntity());
+                        break;
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
+                        break;
+                    default:
+                        callBack.onFailure(response.getStateCode(), response.getMessage());
+                        break;
+                }
+            }
+        }.execute();
+
+    }
+
+    public void getSchoolWorkList(final int teacherCourseId,
+                                  final CallBack<List<SchoolWork>> callBack) {
+
+        new AsyncTask<Void, Void, Response<List<SchoolWork>>>() {
+            @Override
+            protected Response<List<SchoolWork>> doInBackground(Void... params) {
+                return iHttp.getSchoolWorkList(teacherCourseId, getCookie());
+            }
+
+            @Override
+            protected void onPostExecute(Response<List<SchoolWork>> response) {
+                //TODO delete
+                DebugUtil.printlnEntity(response);
+
+                switch (response.getStateCode()) {
+                    case OK:
+                        callBack.onSucceed(response.getEntityList());
+                        break;
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
                         break;
                     default:
                         callBack.onFailure(response.getStateCode(), response.getMessage());

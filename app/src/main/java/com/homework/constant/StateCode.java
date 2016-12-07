@@ -14,7 +14,7 @@ public enum StateCode {
     /**
      * 网络或服务器访问失败
      */
-    INTERNET_FAIL,
+    INTERNET_UNABLE,
     /**
      * 程序出错
      */

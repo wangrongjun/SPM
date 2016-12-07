@@ -2,6 +2,7 @@ package com.homework.model.api;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.homework.bean.SchoolWork;
 import com.homework.bean.Student;
 import com.homework.bean.Teacher;
 import com.homework.bean.TeacherCourse;
@@ -17,14 +18,17 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 /**
  * by wangrongjun on 2016/12/6.
- * 接口层的具体实现（使用HttpUtil或HttpClient进行数据的获取，返回Response对象）
+ * 后台接口层的具体实现（使用HttpUtil或HttpClient进行数据的获取，返回Response对象）
  */
 public class HttpImpl implements IHttp {
 
     /**
+     * 把后台返回的json（Msg对象的json）转化为Response对象
+     *
      * @param entityType 例如，Student类型或者List<Student>类型
      */
     private <T> Response<T> parseMsgJson(String msgJson, Type entityType) {
@@ -85,7 +89,7 @@ public class HttpImpl implements IHttp {
             }.getType();
             return parseMsgJson(r.result, type);
         } else {
-            return new Response<>(StateCode.INTERNET_FAIL, r.result);
+            return new Response<>(StateCode.INTERNET_UNABLE, r.result);
         }
     }
 
@@ -103,7 +107,7 @@ public class HttpImpl implements IHttp {
             }.getType();
             return parseMsgJson(r.result, type);
         } else {
-            return new Response<>(StateCode.INTERNET_FAIL, r.result);
+            return new Response<>(StateCode.INTERNET_UNABLE, r.result);
         }
     }
 
@@ -119,7 +123,55 @@ public class HttpImpl implements IHttp {
             }.getType();
             return parseMsgJson(r.result, type);
         } else {
-            return new Response<>(StateCode.INTERNET_FAIL, r.result);
+            return new Response<>(StateCode.INTERNET_UNABLE, r.result);
+        }
+    }
+
+    @Override
+    public Response<List<Student>> studentGetClassmateList(int studentId, String cookie) {
+        HttpUtil.HttpRequest request = new HttpUtil.HttpRequest();
+        request.setRequestMethod("GET").addRequestProperty("Cookie", cookie);
+        HttpUtil.Result r = request.request(C.getClassmateInfoUrl(studentId));
+        //TODO delete
+        DebugUtil.printlnEntity(r);
+        if (r.state == HttpUtil.OK) {
+            Type type = new TypeToken<List<Student>>() {
+            }.getType();
+            return parseMsgJson(r.result, type);
+        } else {
+            return new Response<>(StateCode.INTERNET_UNABLE, r.result);
+        }
+    }
+
+    @Override
+    public Response<Map<Integer, Object[]>> teacherGetCourseInfoList(int teacherId, String cookie) {
+        HttpUtil.HttpRequest request = new HttpUtil.HttpRequest();
+        request.setRequestMethod("GET").addRequestProperty("Cookie", cookie);
+        HttpUtil.Result r = request.request(C.teacherGetCourseInfoListUrl(teacherId));
+        //TODO delete
+        DebugUtil.printlnEntity(r);
+        if (r.state == HttpUtil.OK) {
+            Type type = new TypeToken<Map<Integer, Object[]>>() {
+            }.getType();
+            return parseMsgJson(r.result, type);
+        } else {
+            return new Response<>(StateCode.INTERNET_UNABLE, r.result);
+        }
+    }
+
+    @Override
+    public Response<List<SchoolWork>> getSchoolWorkList(int teacherCourseId, String cookie) {
+        HttpUtil.HttpRequest request = new HttpUtil.HttpRequest();
+        request.setRequestMethod("GET").addRequestProperty("Cookie", cookie);
+        HttpUtil.Result r = request.request(C.getSchoolWorkUrl(teacherCourseId, "2000-01-01 12:00"));
+        //TODO delete
+        DebugUtil.printlnEntity(r);
+        if (r.state == HttpUtil.OK) {
+            Type type = new TypeToken<List<SchoolWork>>() {
+            }.getType();
+            return parseMsgJson(r.result, type);
+        } else {
+            return new Response<>(StateCode.INTERNET_UNABLE, r.result);
         }
     }
 

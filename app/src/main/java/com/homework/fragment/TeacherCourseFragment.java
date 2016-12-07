@@ -12,12 +12,14 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.CourseInfoActivity;
-import com.homework.bean.Course;
-import com.homework.model.api.Msg;
+import com.homework.adapter.DefaultListAdapter;
 import com.homework.bean.StudentClass;
 import com.homework.bean.TeacherCourse;
 import com.homework.constant.C;
-import com.homework.util.DefaultListAdapter;
+import com.homework.constant.StateCode;
+import com.homework.model.CallBack;
+import com.homework.model.DataModel;
+import com.homework.model.api.Msg;
 import com.homework.util.P;
 import com.homework.util.Util;
 import com.wang.android_lib.adapter.LoadingAdapter;
@@ -29,8 +31,6 @@ import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +45,7 @@ public class TeacherCourseFragment extends Fragment {
     @Bind(R.id.lv_course)
     ListView lvCourse;
 
+    private DataModel dataModel = new DataModel();
     private List<Pair<TeacherCourse, List<StudentClass>>> dataList;
 
     @Nullable
@@ -61,7 +62,7 @@ public class TeacherCourseFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id == NullAdapter.NULL_ADAPTER_ID) {//如果是空适配器，即加载失败
-                    startGetCourseInfo();
+                    getCourseInfoListAndShow();
                 } else if (id != LoadingAdapter.LOADING_ADAPTER_ID) {//若当前不是查询中，即已加载完成
                     TeacherCourse tc = dataList.get(position).first;
                     CourseInfoActivity.start(getActivity(), tc);
@@ -70,6 +71,35 @@ public class TeacherCourseFragment extends Fragment {
         });
     }
 
+    public void getCourseInfoListAndShow() {
+        lvCourse.setAdapter(new LoadingAdapter(getActivity()));
+
+        dataModel.teacherGetCourseInfoList(new CallBack<Map<Integer, Object[]>>() {
+            @Override
+            public void onSucceed(Map<Integer, Object[]> data) {
+                showListData(data);
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+            }
+        });
+    }
+
+    private void showListData(Map<Integer, Object[]> data) {
+        Pair<List<Pair<TeacherCourse, List<StudentClass>>>, List<Pair<String, String>>> pair =
+                Util.courseInfoMapToList(data);
+        if (pair == null) {
+            M.t(getActivity(), "程序异常，课程列表获取失败");
+        } else {
+            dataList = pair.first;
+            List<Pair<String, String>> showList = pair.second;
+            lvCourse.setAdapter(new DefaultListAdapter(getActivity(), showList));
+        }
+    }
+
+    //TODO delete
     public void startGetCourseInfo() {
         lvCourse.setAdapter(new LoadingAdapter(getActivity()));
 
@@ -95,48 +125,7 @@ public class TeacherCourseFragment extends Fragment {
                 lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
             }
         });
-        helper.request(C.getTeacherClassListUrl(P.getTeacher().getTeacherId()));
-    }
-
-    /**
-     * Map<Integer, new Object[]>(键为课程编号,值Object[]第一个元素为课程名，
-     * 第二个元素表示该课程下的班级编号集合)
-     * {"code":0,"message":{"1":["软件工程",[1]]}}
-     */
-    private void showListData(Map<Integer, Object[]> map) {
-        dataList = new ArrayList<>();
-
-        List<Pair<String, String>> showList = new ArrayList<>();
-
-        try {
-            Iterator<Map.Entry<Integer, Object[]>> iterator = map.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, Object[]> entry = iterator.next();
-                Integer teacherCourseId = entry.getKey();
-                String courseName = (String) entry.getValue()[0];
-                List<Double> studentClassIdList = (List<Double>) entry.getValue()[1];
-
-                TeacherCourse teacherCourse = new TeacherCourse();
-                teacherCourse.setTeacherCourseId(teacherCourseId);
-                teacherCourse.setCourse(new Course(courseName));
-
-                List<StudentClass> studentClassList = new ArrayList<>();
-                for (double d : studentClassIdList) {
-                    //TODO classId+""改为className
-                    int classId = (int) d;
-                    studentClassList.add(new StudentClass(classId, classId + ""));
-                }
-
-                dataList.add(new Pair<>(teacherCourse, studentClassList));
-
-                showList.add(new Pair<>(courseName, ""));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            M.t(getActivity(), "程序异常，" + e.toString());
-        }
-
-        lvCourse.setAdapter(new DefaultListAdapter(getActivity(), showList));
+        helper.request(C.teacherGetCourseInfoListUrl(P.getTeacher().getTeacherId()));
     }
 
     @Override

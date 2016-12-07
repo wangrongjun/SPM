@@ -14,6 +14,9 @@ import com.homework.R;
 import com.homework.activity.common.BaseActivity;
 import com.homework.adapter.SchoolWorkListAdapter;
 import com.homework.bean.Course;
+import com.homework.constant.StateCode;
+import com.homework.model.CallBack;
+import com.homework.model.DataModel;
 import com.homework.model.api.Msg;
 import com.homework.bean.SchoolWork;
 import com.homework.bean.TeacherCourse;
@@ -25,6 +28,7 @@ import com.wang.android_lib.adapter.LoadingAdapter;
 import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
+import com.wang.android_lib.util.M;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 import com.wang.math.sort.ISort;
@@ -50,8 +54,8 @@ public class CourseInfoActivity extends BaseActivity {
     LinearLayout btnAddSchoolWork;
 
     private TeacherCourse teacherCourse;
-
     private SchoolWorkListAdapter adapter;
+    private DataModel dataModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,8 @@ public class CourseInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
         initData();
         initView();
-        startGetSchoolWork();
+//        startGetSchoolWork();
+        getSchoolWorkListAndShow();
     }
 
     public static void start(Context context, TeacherCourse teacherCourse) {
@@ -70,13 +75,14 @@ public class CourseInfoActivity extends BaseActivity {
     }
 
     private void initData() {
+        dataModel = new DataModel();
         String json = getIntent().getStringExtra("teacherCourse");
         teacherCourse = new Gson().fromJson(json, TeacherCourse.class);
     }
 
     private void initView() {
 
-        if (P.getRole() == C.ROLE_STUDENT) {
+        if (dataModel.getRole() == C.ROLE_STUDENT) {
             btnAddSchoolWork.setVisibility(View.GONE);
         }
 
@@ -92,7 +98,7 @@ public class CourseInfoActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id != NullAdapter.NULL_ADAPTER_ID && id != LoadingAdapter.LOADING_ADAPTER_ID) {
                     SchoolWork schoolWork = adapter.getSchoolWorkList().get(position);
-                    if (P.getRole() == C.ROLE_STUDENT) {
+                    if (dataModel.getRole() == C.ROLE_STUDENT) {
                         StudentSchoolWorkInfoActivity.start(CourseInfoActivity.this, schoolWork);
                     } else {
                         TeacherSchoolWorkInfoActivity.start(CourseInfoActivity.this, schoolWork);
@@ -108,6 +114,29 @@ public class CourseInfoActivity extends BaseActivity {
 
     }
 
+    private void getSchoolWorkListAndShow() {
+        lvSchoolWork.setAdapter(new LoadingAdapter(this));
+
+        int teacherCourseId = teacherCourse.getTeacherCourseId();
+        dataModel.getSchoolWorkList(teacherCourseId, new CallBack<List<SchoolWork>>() {
+            @Override
+            public void onSucceed(List<SchoolWork> schoolWorkList) {
+                if (schoolWorkList != null && schoolWorkList.size() > 0) {
+                    showSchoolWorkList(schoolWorkList);
+                } else {
+                    lvSchoolWork.setAdapter(new NullAdapter(CourseInfoActivity.this, "暂无作业"));
+                }
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                lvSchoolWork.setAdapter(adapter);
+                M.t(CourseInfoActivity.this, errorMsg);
+            }
+        });
+    }
+
+    //TODO delete
     private void startGetSchoolWork() {
 
         lvSchoolWork.setAdapter(new LoadingAdapter(this));
@@ -167,7 +196,8 @@ public class CourseInfoActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 3333 && resultCode == 44) {
-            startGetSchoolWork();
+//            startGetSchoolWork();
+            getSchoolWorkListAndShow();
         }
     }
 

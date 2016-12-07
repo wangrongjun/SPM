@@ -14,6 +14,9 @@ import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.StudentInfoActivity;
 import com.homework.adapter.StudentListAdapter;
+import com.homework.constant.StateCode;
+import com.homework.model.CallBack;
+import com.homework.model.DataModel;
 import com.homework.model.api.Msg;
 import com.homework.bean.Student;
 import com.homework.constant.C;
@@ -42,6 +45,8 @@ public class StudentClassFragment extends Fragment {
     @Bind(R.id.lv_student)
     ListView lvStudent;
 
+    private DataModel dataModel;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,11 +54,12 @@ public class StudentClassFragment extends Fragment {
         ButterKnife.bind(this, view);
         initData();
         initView();
-        startGetClassInfo();
+        getClassmateListAndShow();
         return view;
     }
 
     private void initData() {
+        dataModel = new DataModel();
         try {
             String className = P.getStudent().getStudentInformation().getStudentClass().getClassName();
             tvClassName.setText(className);
@@ -67,7 +73,8 @@ public class StudentClassFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id == NullAdapter.NULL_ADAPTER_ID && position == 0) {//如果是空适配器，即加载失败
-                    startGetClassInfo();
+//                    startGetClassInfo();
+                    getClassmateListAndShow();
                 } else if (id != LoadingAdapter.LOADING_ADAPTER_ID) {//若当前不是查询中，即已加载完成
                     Student student = (Student) lvStudent.getAdapter().getItem(position);
                     StudentInfoActivity.start(getActivity(), student);
@@ -76,6 +83,21 @@ public class StudentClassFragment extends Fragment {
         });
     }
 
+    private void getClassmateListAndShow() {
+        dataModel.studentGetClassmateList(new CallBack<List<Student>>() {
+            @Override
+            public void onSucceed(List<Student> data) {
+                lvStudent.setAdapter(new StudentListAdapter(getActivity(), data));
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                lvStudent.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+            }
+        });
+    }
+
+    //TODO delete
     private void startGetClassInfo() {
         lvStudent.setAdapter(new LoadingAdapter(getActivity()));
 

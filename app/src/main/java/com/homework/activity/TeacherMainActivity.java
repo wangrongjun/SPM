@@ -123,7 +123,7 @@ public class TeacherMainActivity extends BaseActivity {
                 break;
             case 1:
                 if (isFirstCourseFragmentStartGetCourseInfo) {
-                    courseFragment.startGetCourseInfo();
+                    courseFragment.getCourseInfoListAndShow();
                     isFirstCourseFragmentStartGetCourseInfo = false;
                 }
                 break;

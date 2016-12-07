@@ -63,7 +63,7 @@ public class P extends PrefUtil {
         setEntity(context, prefName, teacher);
     }
 
-    public static int getRole() {
+    public static int getRole() {//Pref不可能同时存在teacher和student对象，因为退出帐号时会清空Pref
         return getTeacher().getAccount() == null ? C.ROLE_STUDENT : C.ROLE_TEACHER;
     }
 

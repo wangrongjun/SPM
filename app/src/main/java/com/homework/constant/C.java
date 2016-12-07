@@ -7,7 +7,7 @@ import java.io.File;
 /**
  * by 王荣俊 on 2016/10/5.
  */
-public class C  {
+public class C {
 
     //    public static final String hostUrl = "http://123.207.87.197:8080/homework";
     public static final String hostUrl = "http://coolgmr.com:8080/homework";
@@ -55,7 +55,7 @@ public class C  {
      * 第二个元素表示该课程下的班级编号集合)
      * {"code":0,"message":{"1":["软件工程",[1]]}}
      */
-    public static String getTeacherClassListUrl(int teacherId) {
+    public static String teacherGetCourseInfoListUrl(int teacherId) {
         return hostUrl + "/teacherCourse/studentClasses/" + teacherId;
     }
 

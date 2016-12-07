@@ -4,8 +4,11 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.homework.model.api.Msg;
+import com.homework.bean.Course;
+import com.homework.bean.StudentClass;
+import com.homework.bean.TeacherCourse;
 import com.homework.constant.C;
+import com.homework.model.api.Msg;
 import com.wang.android_lib.util.M;
 import com.wang.java_util.CharsetUtil;
 import com.wang.java_util.DebugUtil;
@@ -18,6 +21,10 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * by wangrongjun on 2016/10/31.
@@ -64,6 +71,48 @@ public class Util {
             return new Pair<>(false, null);
         }
 
+    }
+
+    /**
+     * Map<Integer, new Object[]>(键为课程编号,值Object[]第一个元素为课程名，
+     * 第二个元素表示该课程下的班级编号集合)
+     * {"code":0,"message":{"1":["软件工程",[1]]}}
+     */
+    public static Pair<List<Pair<TeacherCourse, List<StudentClass>>>, List<Pair<String, String>>>
+    courseInfoMapToList(Map<Integer, Object[]> map) {
+
+        List<Pair<TeacherCourse, List<StudentClass>>> dataList = new ArrayList<>();
+        List<Pair<String, String>> showList = new ArrayList<>();
+
+        try {
+            Iterator<Map.Entry<Integer, Object[]>> iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, Object[]> entry = iterator.next();
+                Integer teacherCourseId = entry.getKey();
+                String courseName = (String) entry.getValue()[0];
+                List<Double> studentClassIdList = (List<Double>) entry.getValue()[1];
+
+                TeacherCourse teacherCourse = new TeacherCourse();
+                teacherCourse.setTeacherCourseId(teacherCourseId);
+                teacherCourse.setCourse(new Course(courseName));
+
+                List<StudentClass> studentClassList = new ArrayList<>();
+                for (double d : studentClassIdList) {
+                    //TODO classId+""改为className
+                    int classId = (int) d;
+                    studentClassList.add(new StudentClass(classId, classId + ""));
+                }
+
+                dataList.add(new Pair<>(teacherCourse, studentClassList));
+                showList.add(new Pair<>(courseName, ""));
+            }
+
+            return new Pair<>(dataList, showList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

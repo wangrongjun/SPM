@@ -83,9 +83,11 @@ public class StudentListAdapter extends BaseAdapter {
     private void updateView(ViewHolder holder, int position) {
         Student student = students.get(position);
         StudentInformation info = student.getStudentInformation();
-        holder.tvStudentName.setText(info.getRealName());
-        holder.tvStudentNumber.setText(student.getAccount());
-        holder.tvGender.setText(info.getGender());
+        if (info != null) {
+            holder.tvStudentName.setText(info.getRealName());
+            holder.tvStudentNumber.setText(student.getAccount());
+            holder.tvGender.setText(info.getGender());
+        }
     }
 
     static class ViewHolder {

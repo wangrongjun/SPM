@@ -1,4 +1,4 @@
-package com.homework.util;
+package com.homework.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
