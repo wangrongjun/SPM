@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/fragment_extra_file"
-        android:name="com.homework.fragment.ExtraFileListFragment"
+        android:name="com.homework.fragment.common.ExtraFileListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.CourseInfoActivity;
 import com.homework.bean.Course;
-import com.homework.bean.Msg;
+import com.homework.model.api.Msg;
 import com.homework.bean.StudentClass;
 import com.homework.bean.TeacherCourse;
 import com.homework.constant.C;

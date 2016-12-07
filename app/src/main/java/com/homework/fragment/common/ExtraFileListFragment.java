@@ -1,4 +1,4 @@
-package com.homework.fragment;
+package com.homework.fragment.common;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -22,7 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.adapter.ExtraFileListAdapter;
 import com.homework.bean.ExtraFile;
-import com.homework.bean.Msg;
+import com.homework.model.api.Msg;
 import com.homework.constant.C;
 import com.homework.service.DownloadExtraFileService;
 import com.homework.util.P;

@@ -1,4 +1,4 @@
-package com.homework.main;
+package com.homework.system;
 
 import android.app.Application;
 import android.os.Process;

@@ -1,5 +1,8 @@
 package com.homework.activity.common;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,11 +16,26 @@ import com.jude.swipbackhelper.SwipeListener;
  */
 public class BaseActivity extends FragmentActivity {
 
+    private BroadcastReceiver receiver;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
+//        initReceiver();
 //        initSwipeBackHelper();
+    }
+
+    private void initReceiver() {
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                onReceive(context, intent);
+            }
+        };
+    }
+
+    protected void onReceive(Context context, Intent intent) {
     }
 
     private void initSwipeBackHelper() {
@@ -57,6 +75,7 @@ public class BaseActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         SwipeBackHelper.onDestroy(this);
+//        unregisterReceiver(receiver);
     }
 
 }

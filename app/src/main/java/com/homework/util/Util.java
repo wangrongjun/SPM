@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.homework.bean.Msg;
+import com.homework.model.api.Msg;
 import com.homework.constant.C;
 import com.wang.android_lib.util.M;
 import com.wang.java_util.CharsetUtil;

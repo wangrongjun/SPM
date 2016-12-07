@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.StudentInfoActivity;
 import com.homework.adapter.StudentListAdapter;
-import com.homework.bean.Msg;
+import com.homework.model.api.Msg;
 import com.homework.bean.Student;
 import com.homework.constant.C;
 import com.homework.util.P;
@@ -23,7 +23,6 @@ import com.wang.android_lib.adapter.LoadingAdapter;
 import com.wang.android_lib.adapter.NullAdapter;
 import com.wang.android_lib.helper.AndroidHttpHelper;
 import com.wang.android_lib.util.AndroidHttpUtil;
-import com.wang.android_lib.util.M;
 import com.wang.java_util.HttpUtil;
 import com.wang.java_util.Pair;
 
@@ -48,19 +47,22 @@ public class StudentClassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_class, container, false);
         ButterKnife.bind(this, view);
+        initData();
         initView();
         startGetClassInfo();
         return view;
     }
 
-    private void initView() {
+    private void initData() {
         try {
             String className = P.getStudent().getStudentInformation().getStudentClass().getClassName();
             tvClassName.setText(className);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void initView() {
         lvStudent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

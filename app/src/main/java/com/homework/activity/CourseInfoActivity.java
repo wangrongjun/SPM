@@ -14,7 +14,7 @@ import com.homework.R;
 import com.homework.activity.common.BaseActivity;
 import com.homework.adapter.SchoolWorkListAdapter;
 import com.homework.bean.Course;
-import com.homework.bean.Msg;
+import com.homework.model.api.Msg;
 import com.homework.bean.SchoolWork;
 import com.homework.bean.TeacherCourse;
 import com.homework.constant.C;

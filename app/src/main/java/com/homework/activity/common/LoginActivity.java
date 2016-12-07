@@ -18,10 +18,13 @@ import com.google.gson.reflect.TypeToken;
 import com.homework.R;
 import com.homework.activity.StudentMainActivity;
 import com.homework.activity.TeacherMainActivity;
-import com.homework.bean.Msg;
+import com.homework.model.api.Msg;
 import com.homework.bean.Student;
 import com.homework.bean.Teacher;
 import com.homework.constant.C;
+import com.homework.constant.StateCode;
+import com.homework.model.DataModel;
+import com.homework.model.CallBack;
 import com.homework.util.P;
 import com.homework.util.Util;
 import com.wang.android_lib.helper.AndroidHttpHelper;
@@ -60,10 +63,13 @@ public class LoginActivity extends Activity {
     @Bind(R.id.rb_student)
     RadioButton rbStudent;
 
+    private DataModel dataModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowUtil.transStateBar(this);
+        dataModel = new DataModel();
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -104,14 +110,14 @@ public class LoginActivity extends Activity {
                 startGetVerifyCode();
                 break;
             case R.id.btn_login:
-                String number = etNumber.getText();
+                String account = etNumber.getText();
                 String password = etPassword.getText();
                 int role = rbStudent.isChecked() ? C.ROLE_STUDENT : C.ROLE_TEACHER;
                 String verifyCode = etVerifyCode.getText().toString();
-                if (!TextUtil.isEmpty(number, password, verifyCode)) {
-                    startLogin(number, password, role, verifyCode);
+                if (role == C.ROLE_STUDENT) {
+                    studentLogin(account, password, verifyCode);
                 } else {
-                    M.t(this, "请填写信息");
+                    teacherLogin(account, password, verifyCode);
                 }
                 break;
             case R.id.btn_test:
@@ -161,6 +167,34 @@ public class LoginActivity extends Activity {
             }
 
         }).request(C.getLoginUrl());
+    }
+
+    private void studentLogin(final String account, final String password, final String verifyCode) {
+        dataModel.studentLogin(account, password, verifyCode, new CallBack<Student>() {
+            @Override
+            public void onSucceed(Student data) {
+                startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                M.t(LoginActivity.this, errorMsg);
+            }
+        });
+    }
+
+    private void teacherLogin(final String account, final String password, final String verifyCode) {
+        dataModel.studentLogin(account, password, verifyCode, new CallBack<Student>() {
+            @Override
+            public void onSucceed(Student data) {
+                startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                M.t(LoginActivity.this, errorMsg);
+            }
+        });
     }
 
     private void startGetVerifyCode() {

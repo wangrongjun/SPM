@@ -1,9 +1,9 @@
-package com.homework.bean;
+package com.homework.model.api;
 
 public class Msg<T> {
     private int code;
     private T message;
-
+    
     public int getCode() {
         return code;
     }
