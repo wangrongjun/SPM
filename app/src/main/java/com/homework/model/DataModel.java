@@ -1,7 +1,9 @@
 package com.homework.model;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import com.homework.bean.CommitSchoolWork;
 import com.homework.bean.SchoolWork;
 import com.homework.bean.Student;
 import com.homework.bean.Teacher;
@@ -11,6 +13,7 @@ import com.homework.model.api.HttpImpl;
 import com.homework.model.api.IHttp;
 import com.homework.util.P;
 import com.wang.java_util.DebugUtil;
+import com.wang.java_util.Pair;
 import com.wang.java_util.TextUtil;
 
 import java.util.List;
@@ -49,6 +52,37 @@ public class DataModel {
 
     public int getRole() {
         return P.getRole();
+    }
+
+    public void getVerifyCodeBitmap(final CallBack<Bitmap> callBack) {
+
+        new AsyncTask<Void, Void, Response<Pair<String, Bitmap>>>() {
+            @Override
+            protected Response<Pair<String, Bitmap>> doInBackground(Void... params) {
+                return iHttp.getVerifyCodeBitmap();
+            }
+
+            @Override
+            protected void onPostExecute(Response<Pair<String, Bitmap>> response) {
+                //TODO delete
+                DebugUtil.printlnEntity(response);
+
+                switch (response.getStateCode()) {
+                    case OK:
+                        Pair<String, Bitmap> pair = response.getEntity();
+                        P.setCookie(pair.first);
+                        callBack.onSucceed(pair.second);
+                        break;
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
+                        break;
+                    default:
+                        callBack.onFailure(response.getStateCode(), response.getMessage());
+                        break;
+                }
+            }
+        }.execute();
+
     }
 
     public void studentLogin(final String account, final String password, final String verifyCode,
@@ -229,6 +263,35 @@ public class DataModel {
                 switch (response.getStateCode()) {
                     case OK:
                         callBack.onSucceed(response.getEntityList());
+                        break;
+                    case INTERNET_UNABLE:
+                        callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);
+                        break;
+                    default:
+                        callBack.onFailure(response.getStateCode(), response.getMessage());
+                        break;
+                }
+            }
+        }.execute();
+
+    }
+
+    public void getCommitSchoolWork(final int schoolWorkId, final CallBack<CommitSchoolWork> callBack) {
+
+        new AsyncTask<Void, Void, Response<CommitSchoolWork>>() {
+            @Override
+            protected Response<CommitSchoolWork> doInBackground(Void... params) {
+                return iHttp.getCommitSchoolWork(schoolWorkId, getCookie());
+            }
+
+            @Override
+            protected void onPostExecute(Response<CommitSchoolWork> response) {
+                //TODO delete
+                DebugUtil.printlnEntity(response);
+
+                switch (response.getStateCode()) {
+                    case OK:
+                        callBack.onSucceed(response.getEntity());
                         break;
                     case INTERNET_UNABLE:
                         callBack.onFailure(StateCode.INTERNET_UNABLE, INTERNET_UNABLE_HINT);

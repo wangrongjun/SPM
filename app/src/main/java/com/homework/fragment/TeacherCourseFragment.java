@@ -83,6 +83,7 @@ public class TeacherCourseFragment extends Fragment {
             @Override
             public void onFailure(StateCode stateCode, String errorMsg) {
                 lvCourse.setAdapter(new NullAdapter(getActivity(), "重新获取"));
+                M.t(getActivity(), errorMsg);
             }
         });
     }

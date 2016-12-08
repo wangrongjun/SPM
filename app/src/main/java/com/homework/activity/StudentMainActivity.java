@@ -102,9 +102,8 @@ public class StudentMainActivity extends BaseActivity {
 
             }
         });
-        //设置左右缓存页面数为3，避免重复加载
-//        viewPager.setOffscreenPageLimit(3);
-        viewPager.setOffscreenPageLimit(1);//测试用
+//        设置左右缓存页面数为3，避免重复加载
+        viewPager.setOffscreenPageLimit(3);
     }
 
     /**

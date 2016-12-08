@@ -107,7 +107,8 @@ public class LoginActivity extends Activity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_verify_code:
-                startGetVerifyCode();
+//                startGetVerifyCode();
+                getVerifyCodeBitmap();
                 break;
             case R.id.btn_login:
                 String account = etNumber.getText();
@@ -124,6 +125,62 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
                 break;
         }
+    }
+
+    private void getVerifyCodeBitmap() {
+        ivVerifyCode.setImageResource(R.mipmap.ic_loading);
+        ivVerifyCode.startAnimation(AnimationUtil.getConstantSpeedRotateAnim(1000));
+
+        dataModel.getVerifyCodeBitmap(new CallBack<Bitmap>() {
+            @Override
+            public void onSucceed(Bitmap data) {
+                ivVerifyCode.clearAnimation();
+                ivVerifyCode.setImageBitmap(data);
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                ivVerifyCode.clearAnimation();
+                ivVerifyCode.setImageResource(R.mipmap.ic_error);
+                M.t(LoginActivity.this, errorMsg);
+            }
+        });
+    }
+
+    private void studentLogin(final String account, final String password, final String verifyCode) {
+        DialogUtil.showProgressDialog(LoginActivity.this, "正在登录");
+
+        dataModel.studentLogin(account, password, verifyCode, new CallBack<Student>() {
+            @Override
+            public void onSucceed(Student data) {
+                DialogUtil.cancelProgressDialog();
+                startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                DialogUtil.cancelProgressDialog();
+                M.t(LoginActivity.this, errorMsg);
+            }
+        });
+    }
+
+    private void teacherLogin(final String account, final String password, final String verifyCode) {
+        DialogUtil.showProgressDialog(LoginActivity.this, "正在登录");
+
+        dataModel.teacherLogin(account, password, verifyCode, new CallBack<Teacher>() {
+            @Override
+            public void onSucceed(Teacher data) {
+                DialogUtil.cancelProgressDialog();
+                startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                DialogUtil.cancelProgressDialog();
+                M.t(LoginActivity.this, errorMsg);
+            }
+        });
     }
 
     private void startLogin(final String number, final String password, final int role, final String verifyCode) {
@@ -169,34 +226,7 @@ public class LoginActivity extends Activity {
         }).request(C.getLoginUrl());
     }
 
-    private void studentLogin(final String account, final String password, final String verifyCode) {
-        dataModel.studentLogin(account, password, verifyCode, new CallBack<Student>() {
-            @Override
-            public void onSucceed(Student data) {
-                startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
-            }
-
-            @Override
-            public void onFailure(StateCode stateCode, String errorMsg) {
-                M.t(LoginActivity.this, errorMsg);
-            }
-        });
-    }
-
-    private void teacherLogin(final String account, final String password, final String verifyCode) {
-        dataModel.teacherLogin(account, password, verifyCode, new CallBack<Teacher>() {
-            @Override
-            public void onSucceed(Teacher data) {
-                startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
-            }
-
-            @Override
-            public void onFailure(StateCode stateCode, String errorMsg) {
-                M.t(LoginActivity.this, errorMsg);
-            }
-        });
-    }
-
+    //TODO delete
     private void startGetVerifyCode() {
 
         AsyncTask<Void, Void, Bitmap> task = new AsyncTask<Void, Void, Bitmap>() {

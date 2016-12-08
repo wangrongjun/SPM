@@ -52,7 +52,7 @@ public class StudentCourseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_student_course, container, false);
         ButterKnife.bind(this, view);
         initView();
-        getTeacherCourseListAndShow();
+        getTeacherCourseListAndShow(getActivity());
         return view;
     }
 
@@ -62,7 +62,7 @@ public class StudentCourseFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (id == NullAdapter.NULL_ADAPTER_ID) {//如果是空适配器，即加载失败
 //                    startGetCourseInfo(getActivity(), lvCourse);
-                    getTeacherCourseListAndShow();
+                    getTeacherCourseListAndShow(getActivity());
                 } else if (id != LoadingAdapter.LOADING_ADAPTER_ID) {//若当前不是查询中，即已加载完成
                     TeacherCourse tc = (TeacherCourse) lvCourse.getAdapter().getItem(position);
                     CourseInfoActivity.start(getActivity(), tc);
@@ -75,6 +75,23 @@ public class StudentCourseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    private void getTeacherCourseListAndShow(final Context context) {
+        lvCourse.setAdapter(new LoadingAdapter(context));
+
+        dataModel.studentGetCourseInfo(new CallBack<List<TeacherCourse>>() {
+            @Override
+            public void onSucceed(List<TeacherCourse> data) {
+                lvCourse.setAdapter(new TeacherCourseListAdapter(context, data));
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                lvCourse.setAdapter(new NullAdapter(context, "重新获取"));
+                M.t(getActivity(), errorMsg);
+            }
+        });
     }
 
     //TODO delete
@@ -104,20 +121,6 @@ public class StudentCourseFragment extends Fragment {
             }
         });
         helper.request(C.getStudentCourseInfoUrl(P.getStudent().getStudentId()));
-    }
-
-    private void getTeacherCourseListAndShow() {
-        dataModel.studentGetCourseInfo(new CallBack<List<TeacherCourse>>() {
-            @Override
-            public void onSucceed(List<TeacherCourse> data) {
-                lvCourse.setAdapter(new TeacherCourseListAdapter(getActivity(), data));
-            }
-
-            @Override
-            public void onFailure(StateCode stateCode, String errorMsg) {
-                M.t(getActivity(), errorMsg);
-            }
-        });
     }
 
 }

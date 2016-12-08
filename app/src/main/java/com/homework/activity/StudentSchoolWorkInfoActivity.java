@@ -13,6 +13,9 @@ import com.homework.bean.CommitSchoolWork;
 import com.homework.bean.ExtraFile;
 import com.homework.bean.SchoolWork;
 import com.homework.constant.C;
+import com.homework.constant.StateCode;
+import com.homework.model.CallBack;
+import com.homework.model.DataModel;
 import com.homework.util.P;
 import com.homework.view.ToolBarView;
 import com.wang.android_lib.helper.AndroidHttpHelper;
@@ -45,6 +48,7 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
     @Bind(R.id.tv_school_work_content)
     TextView tvSchoolWorkContent;
 
+    private DataModel dataModel;
     private SchoolWork schoolWork;
     private CommitSchoolWork commitSchoolWork;
 
@@ -57,10 +61,12 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initView();
-        startQueryCommitState();
+//        startQueryCommitState();
+        getCommitStateAndShow();
     }
 
     private void initData() {
+        dataModel = new DataModel();
         String json = getIntent().getStringExtra("schoolWork");
         schoolWork = new Gson().fromJson(json, SchoolWork.class);
         Set<ExtraFile> extraFiles = schoolWork.getExtraFiles();
@@ -84,6 +90,55 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
         tvTime.setText(s1 + " 到 " + s2);
     }
 
+    private void getCommitStateAndShow() {
+        DialogUtil.showProgressDialog(this, "正在获取状态");
+
+        dataModel.getCommitSchoolWork(schoolWork.getSchoolWorkId(), new CallBack<CommitSchoolWork>() {
+            @Override
+            public void onSucceed(CommitSchoolWork data) {
+                DialogUtil.cancelProgressDialog();
+                toolBar.getRightBtnTextView().setVisibility(View.VISIBLE);
+                commitSchoolWork = data;
+                updateStateView();
+            }
+
+            @Override
+            public void onFailure(StateCode stateCode, String errorMsg) {
+                DialogUtil.cancelProgressDialog();
+                toolBar.getRightBtnTextView().setVisibility(View.GONE);
+                tvState.setText("状态获取失败");
+            }
+        });
+
+    }
+
+    private void updateStateView() {
+        if (commitSchoolWork != null && commitSchoolWork.getCommitSchoolWorkId() != 0) {
+            tvState.setText("已提交");
+            toolBar.getRightBtnTextView().setVisibility(View.VISIBLE);
+            toolBar.getRightBtnTextView().setText("查看");
+            toolBar.getRightBtnTextView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StudentCheckCommitSchoolWorkActivity.start(StudentSchoolWorkInfoActivity.this,
+                            schoolWork, commitSchoolWork);
+                }
+            });
+
+        } else {
+            tvState.setText("未提交");
+            toolBar.getRightBtnTextView().setText("提交");
+            toolBar.getRightBtnTextView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StudentCommitSchoolWorkActivity.start(StudentSchoolWorkInfoActivity.this,
+                            schoolWork, 345, 678);
+                }
+            });
+        }
+    }
+
+    //TODO delete
     private void startQueryCommitState() {
         DialogUtil.showProgressDialog(this, "正在获取状态");
         AndroidHttpHelper helper = new AndroidHttpHelper(this);
@@ -105,6 +160,7 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
         helper.request(C.studentGetCommitSchoolWorkUrl(schoolWork.getSchoolWorkId()));
     }
 
+    //TODO delete
     private void handleResult(String result) {
 //        Type type = new TypeToken<Msg<CommitSchoolWork>>() {
 //        }.getType();
@@ -141,7 +197,8 @@ public class StudentSchoolWorkInfoActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 345 && resultCode == 678) {
-            startQueryCommitState();
+//            startQueryCommitState();
+            getCommitStateAndShow();
         }
     }
 
